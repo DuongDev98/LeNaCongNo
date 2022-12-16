@@ -16,6 +16,14 @@ namespace Project
         DKHACHHANGDAL dKHACHHANGDAL;
         DMATHANGDAL dMATHANGDAL;
         string TDONHANGID = "";
+
+        public void SetData(string TDONHANGID)
+        {
+            this.TDONHANGID = TDONHANGID;
+            Enabled = this.TDONHANGID.Length > 0;
+            Reload();
+        }
+
         public HoaDonBanHang(string TDONHANGID)
         {
             InitializeComponent();
@@ -47,7 +55,6 @@ namespace Project
             Reload();
             detail_SelectionChanged(null, null);
         }
-
         private void Reload()
         {
             //tải thông tin hóa đơn

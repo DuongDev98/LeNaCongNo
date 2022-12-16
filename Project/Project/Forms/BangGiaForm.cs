@@ -33,7 +33,16 @@ namespace Project.Forms
             dtDenNgay.CustomFormat = "dd/MM/yyyy";
             detail.AutoGenerateColumns = false;
 
+            txtLoc.TextChanged += TxtLoc_TextChanged;
             btnLuu.Click += BtnLuu_Click;
+        }
+
+        private void TxtLoc_TextChanged(object sender, EventArgs e)
+        {
+            if (detail.DataSource != null)
+            {
+                (detail.DataSource as DataTable).DefaultView.RowFilter = string.Format("DMATHANG_CODE LIKE '%{0}%' OR DMATHANG_NAME LIKE '%{0}%'", txtLoc.Text.Trim());
+            }
         }
 
         private void BtnLuu_Click(object sender, EventArgs e)
@@ -97,7 +106,9 @@ namespace Project.Forms
 
             if (dBANGGIADAL.InserOrEdit(bangGiaRow, out error))
             {
-
+                Msg.ShowInfo("Lưu thành công bảng giá");
+                DBANGGIAID = bangGiaRow.ID;
+                Reload();
             }
             else
             {

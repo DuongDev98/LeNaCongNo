@@ -160,5 +160,21 @@ namespace Project.DAL
             dt.Columns.Add("THANHTIEN", typeof(int));
             return dt;
         }
+
+        public static DataTable Table(DateTime fromDate, DateTime toDate, string DKHACHHANGID, out string error)
+        {
+            DMATHANGDAL dMATHANGDAL = new DMATHANGDAL();
+            DKHACHHANGDAL dKHACHHANGDAL = new DKHACHHANGDAL();
+            Dictionary<string, object> dic = new Dictionary<string, object>
+            {
+                { "@tungay", fromDate },
+                { "@denngay", toDate },
+                { "@dkhachhangid", DKHACHHANGID }
+            };
+            DataTable dt = Database.GetTable(@"select tdonhang.*, (select name from dkhachhang where id = dkhachhangid) as dkhachhang_name
+            from tdonhang where ngay between @tungay and @denngay
+            and (dkhachhangid = @dkhachhangid or cast(@dkhachhangid as varchar(36))='')", dic, out error);
+            return dt;
+        }
     }
 }

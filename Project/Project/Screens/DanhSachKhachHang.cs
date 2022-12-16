@@ -23,6 +23,8 @@ namespace Project
             grMain.AutoGenerateColumns = false;
             grMain.SelectionChanged += GrMain_SelectionChanged;
             grMain.MouseDown += GrMain_MouseDown;
+            grMain.MouseDoubleClick += GrMain_MouseDoubleClick;
+
             txtLoc.TextChanged += TxtLoc_TextChanged;
 
             tsbAdd.Click += TsbAdd_Click;
@@ -35,6 +37,11 @@ namespace Project
             mnuRefresh.Click += MnuRefresh_Click;
         }
 
+        private void GrMain_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            tsbEdit.PerformClick();
+        }
+
         private void GrMain_SelectionChanged(object sender, EventArgs e)
         {
             tsbEdit.Enabled = tsbDelete.Enabled = grMain.SelectedRows != null && grMain.SelectedRows.Count > 0;
@@ -42,35 +49,41 @@ namespace Project
 
         private void TsbDelete_Click(object sender, EventArgs e)
         {
-            if (Msg.ShowYesNo(string.Format("Xóa {0} khách đang chọn", grMain.SelectedRows.Count)) == DialogResult.Yes)
+            if (grMain.SelectedRows != null && grMain.SelectedRows.Count > 0)
             {
-                string error = "";
-                List<string> ids = new List<string>();
-                foreach (DataGridViewRow r in grMain.SelectedRows)
+                if (Msg.ShowYesNo(string.Format("Xóa {0} khách đang chọn", grMain.SelectedRows.Count)) == DialogResult.Yes)
                 {
-                    ids.Add((r.DataBoundItem as DataRowView).Row["ID"].ToString());
-                }
-                dKHACHHANGDAL.Delete(ids, out error);
-                if (error.Length > 0)
-                {
-                    Msg.ShowWarning(error);
-                }
-                else
-                {
-                    LoadData();
+                    string error = "";
+                    List<string> ids = new List<string>();
+                    foreach (DataGridViewRow r in grMain.SelectedRows)
+                    {
+                        ids.Add((r.DataBoundItem as DataRowView).Row["ID"].ToString());
+                    }
+                    dKHACHHANGDAL.Delete(ids, out error);
+                    if (error.Length > 0)
+                    {
+                        Msg.ShowWarning(error);
+                    }
+                    else
+                    {
+                        LoadData();
+                    }
                 }
             }
         }
         private void TsbEdit_Click(object sender, EventArgs e)
         {
-            string DKHACHHANGID = "";
-            foreach (DataGridViewRow r in grMain.SelectedRows)
+            if (grMain.SelectedRows != null && grMain.SelectedRows.Count > 0)
             {
-                if (DKHACHHANGID.Length == 0) DKHACHHANGID = (r.DataBoundItem as DataRowView).Row["ID"].ToString();
-            }
+                string DKHACHHANGID = "";
+                foreach (DataGridViewRow r in grMain.SelectedRows)
+                {
+                    if (DKHACHHANGID.Length == 0) DKHACHHANGID = (r.DataBoundItem as DataRowView).Row["ID"].ToString();
+                }
 
-            KhachHangForm editKhachHang = new KhachHangForm(DKHACHHANGID);
-            if (editKhachHang.ShowDialog() == DialogResult.OK) LoadData();
+                KhachHangForm editKhachHang = new KhachHangForm(DKHACHHANGID);
+                if (editKhachHang.ShowDialog() == DialogResult.OK) LoadData();
+            }
         }
 
         private void TsbAdd_Click(object sender, EventArgs e)

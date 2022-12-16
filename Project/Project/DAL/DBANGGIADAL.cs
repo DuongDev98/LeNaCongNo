@@ -60,7 +60,7 @@ namespace Project.DAL
             }
             else
             {
-                Database.ExcuteQuery(@"update dbanggia set ngay = @ngay, tungay = @tungay, denngay = @denngay where id = @id", dic, out error);
+                Database.ExcuteQuery(@"update dbanggia set tungay = @tungay, denngay = @denngay where id = @id", dic, out error);
                 if (error.Length > 0) kq = false;
                 else
                 {
@@ -169,7 +169,8 @@ namespace Project.DAL
 
             DataTable dtChiTiet = Database.GetTable(@"select dbanggiachitiet.id, dmathang.id as dmathangid, dmathang.code as dmathang_code, dmathang.name as dmathang_name,
             coalesce(duoi1kg, 0) as duoi1kg, coalesce(tu1kgtrolen, 0) as tu1kgtrolen
-            from dmathang left outer join dbanggiachitiet on dmathangid = dmathang.id and dbanggiaid = @id", dic, out error);
+            from dmathang left outer join dbanggiachitiet on dmathangid = dmathang.id and dbanggiaid = @id
+            order by dmathang.name", dic, out error);
 
             List<DBANGGIACHITIET> details = new List<DBANGGIACHITIET>();
             foreach (DataRow rChiTiet in dtChiTiet.Rows)
