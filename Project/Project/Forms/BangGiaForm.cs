@@ -95,11 +95,8 @@ namespace Project.Forms
 
                 if (duoi1kg > 0 || tu1kgtrolen > 0)
                 {
-                    DBANGGIACHITIET ctRow = new DBANGGIACHITIET();
-                    ctRow.DMATHANG = dMATHANGDAL.Find(DMATHANGID, out error);
-                    ctRow.DUOI1KG = duoi1kg;
-                    ctRow.TU1KGTROLEN = tu1kgtrolen;
-                    if (error.Length == 0) details.Add(ctRow);
+                    DBANGGIACHITIET ctRow = new DBANGGIACHITIET(row, out error);
+                    details.Add(ctRow);
                 }
             }
             bangGiaRow.details = details;

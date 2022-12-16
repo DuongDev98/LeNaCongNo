@@ -175,13 +175,7 @@ namespace Project.DAL
             List<DBANGGIACHITIET> details = new List<DBANGGIACHITIET>();
             foreach (DataRow rChiTiet in dtChiTiet.Rows)
             {
-                DBANGGIACHITIET ctRow = new DBANGGIACHITIET();
-                ctRow.ID = rChiTiet["ID"].ToString();
-                ctRow.DBANGGIAID = DBANGGIAID;
-                ctRow.DMATHANG = dMATHANGDAL.Find(rChiTiet["DMATHANGID"].ToString(), out error);
-                ctRow.DUOI1KG = int.Parse(rChiTiet["DUOI1KG"].ToString());
-                ctRow.TU1KGTROLEN = int.Parse(rChiTiet["TU1KGTROLEN"].ToString());
-
+                DBANGGIACHITIET ctRow = new DBANGGIACHITIET(rChiTiet, out error);
                 if (error.Length == 0)
                 {
                     details.Add(ctRow);

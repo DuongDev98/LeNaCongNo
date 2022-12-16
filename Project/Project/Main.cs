@@ -22,8 +22,20 @@ namespace Project
             mnuDanhMucKhachHang.Click += MnuDanhMucKhachHang_Click;
             mnuDanhMucBangGia.Click += MnuDanhMucBangGia_Click;
             mnuQuanLyBanHang.Click += MnuQuanLyBanHang_Click;
+            mnuTongHopCongNo.Click += MnuTongHopCongNo_Click;
+            mnuChiTietCongNo.Click += MnuChiTietCongNo_Click;
 
             MnuHoaDonBanHang_Click(null, null);
+        }
+
+        private void MnuChiTietCongNo_Click(object sender, EventArgs e)
+        {
+            OpenTapMain(new ChiTietCongNo());
+        }
+
+        private void MnuTongHopCongNo_Click(object sender, EventArgs e)
+        {
+            OpenTapMain(new TongHopCongNo());
         }
 
         private void MnuQuanLyBanHang_Click(object sender, EventArgs e)

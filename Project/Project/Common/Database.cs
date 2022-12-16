@@ -12,6 +12,7 @@ namespace Project.Common
     public class Database
     {
         private const string server = "NGOC-DUONG\\SQLSERVER";
+        //private const string server = "DESKTOP-B13JTK3\\SQLSERVER";
         private const string user = "sa";
         private const string password = "1433";
         private const string data = "doino";
@@ -62,7 +63,7 @@ namespace Project.Common
         public static DataRow GetFirstRow(string query, Dictionary<string, object> attrs, out string error)
         {
             DataTable dt = GetTable(query, attrs, out error);
-            if (dt == null) return null;
+            if (dt == null || dt.Rows.Count == 0) return null;
             else return dt.Rows[0];
         }
         public static DataTable GetTable(string query, Dictionary<string, object> attrs)

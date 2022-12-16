@@ -83,6 +83,12 @@
     <Compile Include="Model\DMATHANG.cs" />
     <Compile Include="Model\TDONHANG.cs" />
     <Compile Include="Model\TDONHANGCHITIET.cs" />
+    <Compile Include="Screens\ChiTietCongNo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Screens\ChiTietCongNo.Designer.cs">
+      <DependentUpon>ChiTietCongNo.cs</DependentUpon>
+    </Compile>
     <Compile Include="Screens\DanhSachBangGia.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -121,6 +127,12 @@
     <Compile Include="Screens\QuanLyBanHang.Designer.cs">
       <DependentUpon>QuanLyBanHang.cs</DependentUpon>
     </Compile>
+    <Compile Include="Screens\TongHopCongNo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Screens\TongHopCongNo.Designer.cs">
+      <DependentUpon>TongHopCongNo.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Forms\BangGiaForm.resx">
       <DependentUpon>BangGiaForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -132,6 +144,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\NhapSoLuong.resx">
       <DependentUpon>NhapSoLuong.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Screens\ChiTietCongNo.resx">
+      <DependentUpon>ChiTietCongNo.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Screens\DanhSachBangGia.resx">
       <DependentUpon>DanhSachBangGia.cs</DependentUpon>
@@ -159,6 +174,9 @@
     </Compile>
     <EmbeddedResource Include="Screens\QuanLyBanHang.resx">
       <DependentUpon>QuanLyBanHang.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Screens\TongHopCongNo.resx">
+      <DependentUpon>TongHopCongNo.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

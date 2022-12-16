@@ -1,6 +1,7 @@
 ﻿using Project.Common;
 using Project.DAL;
 using Project.Forms;
+using Project.Model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -32,6 +33,93 @@ namespace Project.Screens
             mnuEdit.Click += MnuEdit_Click;
             mnuDelete.Click += MnuDelete_Click;
             mnuRefresh.Click += MnuRefresh_Click;
+
+            btnTinhTien.Click += BtnTinhTien_Click;
+        }
+
+        private void BtnTinhTien_Click(object sender, EventArgs e)
+        {
+            StringBuilder sbError = new StringBuilder();
+            DataTable dtHoaDon = Database.GetTable("select * from tdonhang order by ngay asc", null);
+            DataTable dtChiTiet = Database.GetTable("select * from tdonhangchitiet", null);
+            DataTable dtBangGia = Database.GetTable("select * from dbanggia", null);
+            DataTable dtBangGiaChiTiet = Database.GetTable("select * from dbanggiachitiet", null);
+
+            string error = "";
+            try
+            {
+                foreach (DataRow rHoaDon in dtHoaDon.Rows)
+                {
+                    TDONHANG dhRow = new TDONHANG(rHoaDon, out error);
+                    if (error.Length > 0) goto KetThuc;
+                    //tìm bảng giá
+                    DBANGGIA bangGiaRow = TimBangGia(dtBangGia, dhRow);
+                    if (bangGiaRow == null)
+                    {
+                        error = "Ngày \"" + dhRow.NGAY.ToString("dd/MM/yyyy") + "\" không thuộc bảng giá nào";
+                        goto KetThuc;
+                    }
+
+                    int TONGCONG = 0;
+                    //lấy đơn giá mặt hàng
+                    DataRow[] rowChiTiets = dtChiTiet.Select(string.Format("TDONHANGID='{0}'", dhRow.ID));
+                    foreach (DataRow rChiTiet in rowChiTiets)
+                    {
+                        TDONHANGCHITIET ctRow = new TDONHANGCHITIET(rChiTiet, out error);
+                        //lấy đơn giá
+                        DataRow[] rDonGias = dtBangGiaChiTiet.Select(string.Format("DBANGGIAID='{0}' AND DMATHANGID='{1}'", bangGiaRow.ID, ctRow.DMATHANG.ID));
+                        if (rDonGias.Length > 0)
+                        {
+                            //cập nhật đơn giá chi tiết
+                            string fieldDonGia = "DUOI1KG";
+                            if (ctRow.SOLUONG >= 1) fieldDonGia = "TU1KGTROLEN";
+                            ctRow.DONGIA = int.Parse(rDonGias[0][fieldDonGia].ToString());
+                            ctRow.THANHTIEN = (int)(ctRow.DONGIA * ctRow.SOLUONG);
+                            ctRow.Update();
+                            TONGCONG += ctRow.THANHTIEN;
+                        }
+                        else
+                        {
+                            sbError.AppendLine("Mặt hàng có mã: \"" + ctRow.DMATHANG.CODE + "\" từ ngày \"" + bangGiaRow.TuNgay.ToString("dd/MM/yyyy")
+                                + "\" đến \"" + bangGiaRow.DenNgay.ToString("dd/MM/yyyy") + "\" có đơn giá = 0");
+                        }
+                    }
+                    dhRow.TONGCONG = TONGCONG;
+                    dhRow.Update();
+                }
+            }
+            catch (Exception ex)
+            {
+                error = ex.ToString();
+            }
+            KetThuc:
+            if (error.Length > 0)
+            {
+                Msg.ShowWarning(error);
+                return;
+            }
+
+            if (sbError.ToString().Length > 0)
+            {
+                Msg.ShowWarning(sbError.ToString());
+                return;
+            }
+
+            Msg.ShowInfo("Cập nhật tiền hóa đơn theo bảng giá thành công");
+        }
+        private DBANGGIA TimBangGia(DataTable dtBangGia, TDONHANG dhRow)
+        {
+            DBANGGIA bangGiaRow = null;
+            foreach (DataRow rBangGia in dtBangGia.Rows)
+            {
+                DBANGGIA tmp = new DBANGGIA(rBangGia);
+                if (dhRow.NGAY >= tmp.TuNgay || dhRow.NGAY <= tmp.DenNgay)
+                {
+                    bangGiaRow = tmp;
+                    break;
+                }
+            }
+            return bangGiaRow;
         }
 
         private void GrMain_MouseDoubleClick(object sender, MouseEventArgs e)

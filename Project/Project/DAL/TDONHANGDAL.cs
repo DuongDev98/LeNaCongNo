@@ -108,35 +108,22 @@ namespace Project.DAL
 
         public override TDONHANG Find(string id, out string error)
         {
-            DMATHANGDAL dMATHANGDAL = new DMATHANGDAL();
-            DKHACHHANGDAL dKHACHHANGDAL = new DKHACHHANGDAL();
             Dictionary<string, object> dic = new Dictionary<string, object>
             {
                 { "@id", id }
             };
-            DataRow row = Database.GetFirstRow("select * from dkhachhang where id = @id", dic, out error);
+            DataRow row = Database.GetFirstRow("select * from tdonhang where id = @id", dic, out error);
             TDONHANG dhRow = new TDONHANG();
             if (row != null)
             {
-                dhRow.ID = row["ID"].ToString();
-                dhRow.NGAY = DateTime.Parse(row["NGAY"].ToString());
-                dhRow.NAME = row["NAME"].ToString();
-                dhRow.DKHACHHANG = dKHACHHANGDAL.Find(row["DKHACHHANGID"].ToString(), out error);
-                dhRow.TONGCONG = int.Parse(row["TONGCONG"].ToString());
-                dhRow.NOTE = row["NOTE"].ToString();
-
+                dhRow = new TDONHANG(row, out error);
                 //lấy danh sách mặt hàng chi tiết
                 List<TDONHANGCHITIET> details = new List<TDONHANGCHITIET>();
                 DataTable dtChiTiet = Database.GetTable(@"select * from tdonhangchitiet inner join dmathang on dmathangid = dmathang.id
                 where tdonhangid = @id", dic, out error);
                 foreach (DataRow rChiTiet in dtChiTiet.Rows)
                 {
-                    TDONHANGCHITIET ctRow = new TDONHANGCHITIET();
-                    ctRow.ID = rChiTiet["ID"].ToString();
-                    ctRow.DMATHANG = dMATHANGDAL.Find(rChiTiet["DMATHANGID"].ToString(), out error);
-                    ctRow.DONGIA = int.Parse(rChiTiet["DONGIA"].ToString());
-                    ctRow.SOLUONG = int.Parse(rChiTiet["SOLUONG"].ToString());
-                    ctRow.THANHTIEN = int.Parse(rChiTiet["THANHTIEN"].ToString());
+                    TDONHANGCHITIET ctRow = new TDONHANGCHITIET(rChiTiet, out error);
                     ctRow.TDONHANGID = dhRow.ID;
                     if (error.Length == 0)
                     {
@@ -155,7 +142,7 @@ namespace Project.DAL
             dt.Columns.Add("DMATHANGID", typeof(string));
             dt.Columns.Add("DMATHANG_CODE", typeof(string));
             dt.Columns.Add("DMATHANG_NAME", typeof(string));
-            dt.Columns.Add("SOLUONG", typeof(int));
+            dt.Columns.Add("SOLUONG", typeof(decimal));
             dt.Columns.Add("DONGIA", typeof(int));
             dt.Columns.Add("THANHTIEN", typeof(int));
             return dt;

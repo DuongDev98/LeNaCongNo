@@ -31,8 +31,10 @@ namespace Project.Screens
             hoaDonBanHangForm.FormBorderStyle = FormBorderStyle.None;
             hoaDonBanHangForm.Dock = DockStyle.Fill;
             hoaDonBanHangForm.Show();
-            (hoaDonBanHangForm.Controls[0] as SplitContainer).SplitterDistance = 320;
-            ((hoaDonBanHangForm.Controls[0] as SplitContainer).Panel2.Controls[0] as SplitContainer).SplitterDistance = 55;
+            hoaDonBanHangForm.SplitMain1.SplitterDistance = 320;
+            hoaDonBanHangForm.SplitMain2.SplitterDistance = 55;
+            hoaDonBanHangForm.DeleteSuccess = new Action(()=>btnLoc.PerformClick());
+            AddColumnDetail(hoaDonBanHangForm.Detail);
             splitMain.Panel2.Controls.Add(hoaDonBanHangForm);
 
             cbKhachHang.ValueMember = "ID";
@@ -47,8 +49,23 @@ namespace Project.Screens
             grHoaDon.AutoGenerateColumns = false;
 
             grHoaDon.SelectionChanged += GrHoaDon_SelectionChanged;
-
             btnLoc.Click += BtnLoc_Click;
+        }
+
+        private void AddColumnDetail(DataGridView detail)
+        {
+            DataGridViewColumn colDonGia = new DataGridViewColumn();
+            colDonGia.HeaderText= "Đơn giá";
+            colDonGia.DataPropertyName = "DONGIA";
+            colDonGia.CellTemplate = new DataGridViewTextBoxCell();
+            colDonGia.ReadOnly = true;
+            detail.Columns.Add(colDonGia);
+            DataGridViewColumn colThanhTien = new DataGridViewColumn();
+            colThanhTien.HeaderText = "Thành tiền";
+            colThanhTien.DataPropertyName = "THANHTIEN";
+            colThanhTien.CellTemplate = new DataGridViewTextBoxCell();
+            colThanhTien.ReadOnly = true;
+            detail.Columns.Add(colThanhTien);
         }
 
         private void BtnLoc_Click(object sender, EventArgs e)
@@ -63,6 +80,7 @@ namespace Project.Screens
 
         private void GrHoaDon_SelectionChanged(object sender, EventArgs e)
         {
+            TDONHANGID = "";
             if (grHoaDon.SelectedRows != null && grHoaDon.SelectedRows.Count > 0)
             {
                 TDONHANGID = (grHoaDon.SelectedRows[0].DataBoundItem as DataRowView).Row["ID"].ToString();

@@ -19,7 +19,7 @@ namespace Project.Common
         }
         public static DialogResult ShowYesNo(string msg)
         {
-            return MessageBox.Show(msg, "Cảnh báo", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            return MessageBox.Show(msg, "", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
         }
     }
 }

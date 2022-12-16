@@ -48,7 +48,7 @@ create table tdonhangchitiet
 	id varchar(36) primary key,
 	tdonhangid varchar(36),
 	dmathangid varchar(36),
-	soluong int,
+	soluong decimal(18,2),
 	dongia int,
 	thanhtien int
 )

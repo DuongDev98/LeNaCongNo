@@ -12,6 +12,7 @@ namespace Project
 {
     public partial class HoaDonBanHang : Form
     {
+        public Action DeleteSuccess;
         TDONHANGDAL tDONHANGDAL;
         DKHACHHANGDAL dKHACHHANGDAL;
         DMATHANGDAL dMATHANGDAL;
@@ -21,6 +22,7 @@ namespace Project
         {
             this.TDONHANGID = TDONHANGID;
             Enabled = this.TDONHANGID.Length > 0;
+            btnHuy.Enabled = TDONHANGID.Length > 0;
             Reload();
         }
 
@@ -127,7 +129,7 @@ namespace Project
             if (rows.Length > 0)
             {
                 //cộng số lượng
-                dt.Rows[dt.Rows.IndexOf(rows[0])]["SOLUONG"] = int.Parse(dt.Rows[dt.Rows.IndexOf(rows[0])]["SOLUONG"].ToString()) + 1;
+                dt.Rows[dt.Rows.IndexOf(rows[0])]["SOLUONG"] = decimal.Parse(dt.Rows[dt.Rows.IndexOf(rows[0])]["SOLUONG"].ToString()) + 1;
             }
             else
             {
@@ -146,16 +148,16 @@ namespace Project
         private void btnTang_Click(object sender, EventArgs e)
         {
             DataRow row = (detail.SelectedRows[0].DataBoundItem as DataRowView).Row;
-            int soLuong = int.Parse(row["SOLUONG"].ToString()) + 1;
+            decimal soLuong = decimal.Parse(row["SOLUONG"].ToString()) + 1;
             row["SOLUONG"] = soLuong;
         }
         private void btnGiam_Click(object sender, EventArgs e)
         {
             DataRow row = (detail.SelectedRows[0].DataBoundItem as DataRowView).Row;
-            int soLuong = int.Parse(row["SOLUONG"].ToString());
+            decimal soLuong = decimal.Parse(row["SOLUONG"].ToString());
             if (soLuong > 1)
             {
-                soLuong = int.Parse(row["SOLUONG"].ToString()) - 1;
+                soLuong = decimal.Parse(row["SOLUONG"].ToString()) - 1;
                 row["SOLUONG"] = soLuong;
             }
         }
@@ -226,9 +228,9 @@ namespace Project
                     Msg.ShowWarning(error);
                     return;
                 }
-                ctRow.SOLUONG = int.Parse(row["SOLUONG"].ToString());
+                ctRow.SOLUONG = decimal.Parse(row["SOLUONG"].ToString());
                 ctRow.DONGIA = int.Parse(row["DONGIA"].ToString());
-                ctRow.THANHTIEN = ctRow.SOLUONG * ctRow.DONGIA;
+                ctRow.THANHTIEN = (int)(ctRow.SOLUONG * ctRow.DONGIA);
                 lst.Add(ctRow);
             }
             dhRow.details = lst;
@@ -261,6 +263,7 @@ namespace Project
                 else
                 {
                     //hủy thành công thì chọn sang hóa đơn đầu tiên
+                    if (DeleteSuccess != null) DeleteSuccess();
                 }
             }
         }
@@ -275,5 +278,9 @@ namespace Project
                 cbKhachHang.SelectedValue = khForm.Tag;
             }
         }
+
+        public SplitContainer SplitMain1 => splitMain1;
+        public SplitContainer SplitMain2 => splitMain2;
+        public DataGridView Detail => detail;
     }
 }

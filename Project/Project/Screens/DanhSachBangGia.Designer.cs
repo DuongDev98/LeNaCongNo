@@ -47,6 +47,8 @@
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbAdd = new System.Windows.Forms.ToolStripButton();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.btnTinhTien = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.contextMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grMain)).BeginInit();
             this.toolStrip1.SuspendLayout();
@@ -187,12 +189,27 @@
             this.tsbEdit,
             this.toolStripSeparator4,
             this.tsbDelete,
-            this.toolStripSeparator5});
+            this.toolStripSeparator5,
+            this.btnTinhTien,
+            this.toolStripSeparator1});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(800, 25);
             this.toolStrip1.TabIndex = 2;
             this.toolStrip1.Text = "toolStrip1";
+            // 
+            // btnTinhTien
+            // 
+            this.btnTinhTien.Image = ((System.Drawing.Image)(resources.GetObject("btnTinhTien.Image")));
+            this.btnTinhTien.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnTinhTien.Name = "btnTinhTien";
+            this.btnTinhTien.Size = new System.Drawing.Size(149, 22);
+            this.btnTinhTien.Text = "Tính tiền theo bảng giá";
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
             // 
             // DanhSachBangGia
             // 
@@ -232,5 +249,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column4;
+        private System.Windows.Forms.ToolStripButton btnTinhTien;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
     }
 }

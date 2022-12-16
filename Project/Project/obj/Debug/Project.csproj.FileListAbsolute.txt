@@ -18,3 +18,5 @@ H:\PHUONG\DoiNo\Project\Project\obj\Debug\Project.pdb
 H:\PHUONG\DoiNo\Project\Project\obj\Debug\Project.Forms.NhapSoLuong.resources
 H:\PHUONG\DoiNo\Project\Project\obj\Debug\Project.Forms.BangGiaForm.resources
 H:\PHUONG\DoiNo\Project\Project\obj\Debug\Project.Screens.QuanLyBanHang.resources
+H:\PHUONG\DoiNo\Project\Project\obj\Debug\Project.Screens.TongHopCongNo.resources
+H:\PHUONG\DoiNo\Project\Project\obj\Debug\Project.Screens.ChiTietCongNo.resources
