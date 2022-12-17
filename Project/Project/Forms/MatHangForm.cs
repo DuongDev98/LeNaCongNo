@@ -1,21 +1,12 @@
 ﻿using Project.Common;
-using Project.DAL;
 using Project.Model;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Project.Forms
 {
     public partial class MatHangForm : Form
     {
-        DMATHANGDAL dMATHANGDAL = new DMATHANGDAL();
         string ID;
         public MatHangForm(string ID)
         {
@@ -68,35 +59,36 @@ namespace Project.Forms
                 return false;
             }
 
-            DMATHANG mhRow = new DMATHANG();
+            DMATHANGRow mhRow = new DMATHANGRow("");
             mhRow.ID = ID;
             mhRow.CODE = CODE;
             mhRow.NAME = NAME;
 
             string error;
-            bool kq = dMATHANGDAL.InserOrEdit(mhRow, out error);
-            if (error.Length > 0)
+            if (mhRow.Update(out error))
             {
                 ID = "";
-                Msg.ShowWarning(error);
+                return true;
             }
-
-            return kq;
+            else
+            {
+                Msg.ShowWarning(error);
+                return false;
+            }
         }
 
         private void Reload(string ID)
         {
-            DMATHANG mhRow;
+            DMATHANGRow mhRow;
             if (ID.Length == 0)
             {
                 Text = "Thêm mới";
-                mhRow = new DMATHANG();
+                mhRow = new DMATHANGRow("");
             }
             else
             {
                 Text = "Chỉnh sửa";
-                string error = "";
-                mhRow = dMATHANGDAL.Find(ID, out error);
+                mhRow = new DMATHANGRow(ID);
             }
 
             this.ID = mhRow.ID;

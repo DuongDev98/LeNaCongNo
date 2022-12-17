@@ -1,22 +1,15 @@
 ﻿using Project.Common;
-using Project.DAL;
 using Project.Forms;
 using Project.Model;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Project
 {
     public partial class DanhSachKhachHang : Form
     {
-        DKHACHHANGDAL dKHACHHANGDAL = new DKHACHHANGDAL();
         public DanhSachKhachHang()
         {
             InitializeComponent();
@@ -57,9 +50,9 @@ namespace Project
                     List<string> ids = new List<string>();
                     foreach (DataGridViewRow r in grMain.SelectedRows)
                     {
-                        ids.Add((r.DataBoundItem as DataRowView).Row["ID"].ToString());
+                        DKHACHHANGRow khRow = new DKHACHHANGRow((r.DataBoundItem as DataRowView).Row["ID"].ToString());
+                        if (!khRow.Delete(out error)) break;
                     }
-                    dKHACHHANGDAL.Delete(ids, out error);
                     if (error.Length > 0)
                     {
                         Msg.ShowWarning(error);
@@ -135,13 +128,43 @@ namespace Project
         private void LoadData()
         {
             string loc = txtLoc.Text.Trim();
-            grMain.DataSource = dKHACHHANGDAL.Table(loc);
+            grMain.DataSource = Table(loc);
             GrMain_SelectionChanged(null, null);
         }
 
         private void DanhSachKhachHang_Load(object sender, EventArgs e)
         {
             LoadData();
+        }
+
+        public static DataTable Table(string filter)
+        {
+            string query = "select * from dkhachhang";
+            if (filter.Length > 0)
+            {
+                query += " where code like N'%" + filter + "%' or name like N'%" + filter + "%' or dienthoai like N'%" + filter + "%' or diachi like N'%" + filter + "%'";
+            }
+            query += " order by name asc";
+            DataTable dt = Database.GetTable(query, null);
+            return dt;
+        }
+
+        public static List<DKHACHHANGRow> List(string filter)
+        {
+            List<DKHACHHANGRow> lst = new List<DKHACHHANGRow>();
+            if (filter.Length == 0)
+            {
+                DKHACHHANGRow khRow = new DKHACHHANGRow();
+                lst.Add(khRow);
+            }
+
+            DataTable dt = Table(filter);
+            foreach (DataRow row in dt.Rows)
+            {
+                DKHACHHANGRow khRow = new DKHACHHANGRow(row);
+                lst.Add(khRow);
+            }
+            return lst;
         }
     }
 }

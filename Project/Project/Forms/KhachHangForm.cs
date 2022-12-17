@@ -1,21 +1,12 @@
 ﻿using Project.Common;
-using Project.DAL;
 using Project.Model;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Project.Forms
 {
     public partial class KhachHangForm : Form
     {
-        DKHACHHANGDAL DKHACHHANGDAL = new DKHACHHANGDAL();
         string ID;
         public KhachHangForm(string ID, bool hoaDonBanHang = false)
         {
@@ -81,7 +72,7 @@ namespace Project.Forms
                 return false;
             }
 
-            DKHACHHANG khRow = new DKHACHHANG();
+            DKHACHHANGRow khRow = new DKHACHHANGRow();
             khRow.ID = ID;
             khRow.CODE = CODE;
             khRow.NAME = NAME;
@@ -89,7 +80,7 @@ namespace Project.Forms
             khRow.DIACHI = DIACHI;
 
             string error;
-            bool kq = DKHACHHANGDAL.InserOrEdit(khRow, out error);
+            bool kq = khRow.Update(out error);
             if (error.Length > 0)
             {
                 ID = "";
@@ -99,23 +90,22 @@ namespace Project.Forms
             {
                 Tag = khRow.ID;
             }
-
             return kq;
         }
 
         private void Reload(string ID)
         {
-            DKHACHHANG khRow;
+            DKHACHHANGRow khRow;
             if (ID.Length == 0)
             {
                 Text = "Thêm mới";
-                khRow = new DKHACHHANG();
+                khRow = new DKHACHHANGRow();
             }
             else
             {
                 Text = "Chỉnh sửa";
                 string error = "";
-                khRow = DKHACHHANGDAL.Find(ID, out error);
+                khRow = new DKHACHHANGRow(ID);
             }
 
             this.ID = khRow.ID;

@@ -32,6 +32,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>money.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -48,11 +51,6 @@
   <ItemGroup>
     <Compile Include="Common\Database.cs" />
     <Compile Include="Common\Msg.cs" />
-    <Compile Include="DAL\DBANGGIADAL.cs" />
-    <Compile Include="DAL\TDONHANGDAL.cs" />
-    <Compile Include="DAL\DKHACHHANGDAL.cs" />
-    <Compile Include="DAL\DMATHANGDAL.cs" />
-    <Compile Include="DAL\ObjectDataAccessLayer.cs" />
     <Compile Include="Forms\BangGiaForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -77,12 +75,13 @@
     <Compile Include="Forms\NhapSoLuong.Designer.cs">
       <DependentUpon>NhapSoLuong.cs</DependentUpon>
     </Compile>
-    <Compile Include="Model\DBANGGIA.cs" />
-    <Compile Include="Model\DBANGGIACHITIET.cs" />
-    <Compile Include="Model\DKHACHHANG.cs" />
-    <Compile Include="Model\DMATHANG.cs" />
-    <Compile Include="Model\TDONHANG.cs" />
-    <Compile Include="Model\TDONHANGCHITIET.cs" />
+    <Compile Include="Model\DBANGGIARow.cs" />
+    <Compile Include="Model\DBANGGIACHITIETRow.cs" />
+    <Compile Include="Model\DKHACHHANGRow.cs" />
+    <Compile Include="Model\DMATHANGRow.cs" />
+    <Compile Include="Model\AbstractClass\ModelRow.cs" />
+    <Compile Include="Model\TDONHANGRow.cs" />
+    <Compile Include="Model\TDONHANGCHITIETRow.cs" />
     <Compile Include="Screens\ChiTietCongNo.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -178,6 +177,9 @@
     <EmbeddedResource Include="Screens\TongHopCongNo.resx">
       <DependentUpon>TongHopCongNo.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="..\.editorconfig">
+      <Link>.editorconfig</Link>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -191,6 +193,8 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="money.ico" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

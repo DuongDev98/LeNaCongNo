@@ -1,14 +1,7 @@
 ﻿using Project.Common;
-using Project.DAL;
-using Project.Model;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Project.Screens
@@ -16,13 +9,10 @@ namespace Project.Screens
     public partial class QuanLyBanHang : Form
     {
         string TDONHANGID = "";
-        DKHACHHANGDAL dKHACHHANGDAL;
         HoaDonBanHang hoaDonBanHangForm;
         public QuanLyBanHang()
         {
             InitializeComponent();
-
-            dKHACHHANGDAL = new DKHACHHANGDAL();
 
             splitMain.Panel2.Controls.Clear();
             hoaDonBanHangForm = new HoaDonBanHang("");
@@ -71,11 +61,23 @@ namespace Project.Screens
         private void BtnLoc_Click(object sender, EventArgs e)
         {
             string error;
-            grHoaDon.DataSource = TDONHANGDAL.Table(dtTuNgay.Value.Date, dtDenNgay.Value.Date,
+            grHoaDon.DataSource = LayDanhSachDonHang(dtTuNgay.Value.Date, dtDenNgay.Value.Date,
                 cbKhachHang.SelectedValue == null ? "" : cbKhachHang.SelectedValue.ToString(),
                 out error);
 
             if (error.Length > 0) Msg.ShowWarning(error);
+        }
+
+        private object LayDanhSachDonHang(DateTime fromDate, DateTime toDate, string DKHACHHANGID, out string error)
+        {
+            Dictionary<string, object> dic = new Dictionary<string, object>();
+            dic.Add("@tungay", fromDate);
+            dic.Add("@denngay", toDate);
+            dic.Add("@dkhachhangid", DKHACHHANGID);
+            DataTable dt = Database.GetTable(@"select tdonhang.*, (select name from dkhachhang where id = dkhachhangid) as dkhachhang_name
+            from tdonhang where ngay between @tungay and @denngay
+            and (dkhachhangid = @dkhachhangid or cast(@dkhachhangid as varchar(36))='')", dic, out error);
+            return dt;
         }
 
         private void GrHoaDon_SelectionChanged(object sender, EventArgs e)
@@ -91,7 +93,7 @@ namespace Project.Screens
         private void QuanLyBanHang_Load(object sender, EventArgs e)
         {
             //Tải dữ liệu khách hàng
-            cbKhachHang.DataSource = dKHACHHANGDAL.List("");
+            cbKhachHang.DataSource = DanhSachKhachHang.List("");
             btnLoc.PerformClick();
             hoaDonBanHangForm.SetData(TDONHANGID);
         }

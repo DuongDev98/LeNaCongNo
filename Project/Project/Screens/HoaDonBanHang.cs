@@ -1,11 +1,9 @@
 ﻿using Project.Common;
-using Project.DAL;
 using Project.Forms;
 using Project.Model;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace Project
@@ -13,9 +11,6 @@ namespace Project
     public partial class HoaDonBanHang : Form
     {
         public Action DeleteSuccess;
-        TDONHANGDAL tDONHANGDAL;
-        DKHACHHANGDAL dKHACHHANGDAL;
-        DMATHANGDAL dMATHANGDAL;
         string TDONHANGID = "";
 
         public void SetData(string TDONHANGID)
@@ -30,11 +25,6 @@ namespace Project
         {
             InitializeComponent();
             this.TDONHANGID = TDONHANGID;
-
-            tDONHANGDAL = new TDONHANGDAL();
-            dKHACHHANGDAL = new DKHACHHANGDAL();
-            dMATHANGDAL = new DMATHANGDAL();
-
             splitMain2.SplitterDistance = 100;
             btnHuy.Enabled = TDONHANGID.Length > 0;
             dtNgay.CustomFormat = "dd/MM/yyyy";
@@ -53,27 +43,21 @@ namespace Project
         {
             splitMain2.SplitterDistance = 85;
             LoadDanhSachMatHang();
-            cbKhachHang.DataSource = dKHACHHANGDAL.List("");
+            cbKhachHang.DataSource = DanhSachKhachHang.List("");
             Reload();
             detail_SelectionChanged(null, null);
         }
         private void Reload()
         {
             //tải thông tin hóa đơn
-            TDONHANG dhRow;
+            TDONHANGRow dhRow;
             if (TDONHANGID.Length == 0)
             {
-                dhRow = new TDONHANG();
+                dhRow = new TDONHANGRow();
             }
             else
             {
-                string error = "";
-                dhRow = tDONHANGDAL.Find(TDONHANGID, out error);
-                if (error.Length > 0)
-                {
-                    Msg.ShowWarning(error);
-                    return;
-                }
+                dhRow = new TDONHANGRow(TDONHANGID);
             }
 
             //fill data
@@ -83,8 +67,8 @@ namespace Project
             txtNOTE.Text = dhRow.NOTE;
 
             //fill details
-            DataTable dtDetails = TDONHANGDAL.GetCreateDetailTable();
-            foreach (TDONHANGCHITIET ctRow in dhRow.details)
+            DataTable dtDetails = GetCreateDetailTable();
+            foreach (TDONHANGCHITIETRow ctRow in dhRow.details)
             {
                 DataRow newRow = dtDetails.NewRow();
                 newRow["ID"] = ctRow.ID;
@@ -113,7 +97,7 @@ namespace Project
 
         private void LoadDanhSachMatHang()
         {
-            grMatHang.DataSource = DMATHANGDAL.LoadData(txtLoc.Text.Trim());
+            grMatHang.DataSource = DanhSachMatHang.LoadData(txtLoc.Text.Trim());
         }
 
         private void grMatHang_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
@@ -193,7 +177,7 @@ namespace Project
         private void btnLuu_Click(object sender, EventArgs e)
         {
             //Đơn hàng phải chọn khách hàng
-            DKHACHHANG khRow = cbKhachHang.SelectedItem as DKHACHHANG;
+            DKHACHHANGRow khRow = cbKhachHang.SelectedItem as DKHACHHANGRow;
             if (khRow == null || khRow.ID.Length == 0)
             {
                 Msg.ShowWarning("Khách hàng không được trống");
@@ -208,7 +192,7 @@ namespace Project
             }
 
             //Lưu dữ liệu
-            TDONHANG dhRow = new TDONHANG();
+            TDONHANGRow dhRow = new TDONHANGRow();
             dhRow.ID = TDONHANGID;
             dhRow.NGAY = dtNgay.Value.Date;
             dhRow.NAME = dhRow.NAME;
@@ -217,17 +201,12 @@ namespace Project
 
             //Lấy dữ liệu chi tiết
             string error;
-            List<TDONHANGCHITIET> lst = new List<TDONHANGCHITIET>();
+            List<TDONHANGCHITIETRow> lst = new List<TDONHANGCHITIETRow>();
             foreach (DataRow row in dtChiTiet.Rows)
             {
                 string DMATHANGID = row["DMATHANGID"].ToString();
-                TDONHANGCHITIET ctRow = new TDONHANGCHITIET();
-                ctRow.DMATHANG = dMATHANGDAL.Find(DMATHANGID, out error);
-                if (error.Length > 0)
-                {
-                    Msg.ShowWarning(error);
-                    return;
-                }
+                TDONHANGCHITIETRow ctRow = new TDONHANGCHITIETRow();
+                ctRow.DMATHANG = new DMATHANGRow(DMATHANGID);
                 ctRow.SOLUONG = decimal.Parse(row["SOLUONG"].ToString());
                 ctRow.DONGIA = int.Parse(row["DONGIA"].ToString());
                 ctRow.THANHTIEN = (int)(ctRow.SOLUONG * ctRow.DONGIA);
@@ -235,7 +214,7 @@ namespace Project
             }
             dhRow.details = lst;
 
-            if (tDONHANGDAL.InserOrEdit(dhRow, out error))
+            if (dhRow.Update(out error))
             {
                 //mở hóa đơn mới nếu không phải quản lý bán hàng
                 if (TDONHANGID.Length == 0)
@@ -254,9 +233,9 @@ namespace Project
         {
             if (Msg.ShowYesNo("Bạn có muốn hủy hóa đơn đang chọn") == DialogResult.Yes)
             {
+                TDONHANGRow dhRow = new TDONHANGRow(TDONHANGID);
                 string error;
-                tDONHANGDAL.Delete(new string[] { TDONHANGID }, out error);
-                if (error.Length > 0)
+                if (!dhRow.Delete(out error))
                 {
                     Msg.ShowWarning(error);
                 }
@@ -274,11 +253,22 @@ namespace Project
             KhachHangForm khForm = new KhachHangForm("", true);
             if (khForm.ShowDialog() == DialogResult.OK)
             {
-                cbKhachHang.DataSource = dKHACHHANGDAL.List("");
+                cbKhachHang.DataSource = DanhSachKhachHang.List("");
                 cbKhachHang.SelectedValue = khForm.Tag;
             }
         }
-
+        public static DataTable GetCreateDetailTable()
+        {
+            DataTable dt = new DataTable();
+            dt.Columns.Add("ID", typeof(string));
+            dt.Columns.Add("DMATHANGID", typeof(string));
+            dt.Columns.Add("DMATHANG_CODE", typeof(string));
+            dt.Columns.Add("DMATHANG_NAME", typeof(string));
+            dt.Columns.Add("SOLUONG", typeof(decimal));
+            dt.Columns.Add("DONGIA", typeof(int));
+            dt.Columns.Add("THANHTIEN", typeof(int));
+            return dt;
+        }
         public SplitContainer SplitMain1 => splitMain1;
         public SplitContainer SplitMain2 => splitMain2;
         public DataGridView Detail => detail;

@@ -1,21 +1,15 @@
 ﻿using Project.Common;
-using Project.DAL;
 using Project.Forms;
+using Project.Model;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Project
 {
     public partial class DanhSachMatHang : Form
     {
-        DMATHANGDAL dMATHANGDAL = new DMATHANGDAL();
         public DanhSachMatHang()
         {
             InitializeComponent();
@@ -56,16 +50,17 @@ namespace Project
                     List<string> ids = new List<string>();
                     foreach (DataGridViewRow r in grMain.SelectedRows)
                     {
-                        ids.Add((r.DataBoundItem as DataRowView).Row["ID"].ToString());
+                        DMATHANGRow mhRow = new DMATHANGRow((r.DataBoundItem as DataRowView).Row["ID"].ToString());
+                        if (!mhRow.Delete(out error)) break;
                     }
-                    dMATHANGDAL.Delete(ids, out error);
+
                     if (error.Length > 0)
                     {
                         Msg.ShowWarning(error);
                     }
                     else
                     {
-                        LoadData();
+                        TaiDuLieu();
                     }
                 }
             }
@@ -81,14 +76,14 @@ namespace Project
                 }
 
                 MatHangForm addMatHang = new MatHangForm(DMATHANGID);
-                if (addMatHang.ShowDialog() == DialogResult.OK) LoadData();
+                if (addMatHang.ShowDialog() == DialogResult.OK) TaiDuLieu();
             }
         }
 
         private void TsbAdd_Click(object sender, EventArgs e)
         {
             MatHangForm addMatHang = new MatHangForm("");
-            if (addMatHang.ShowDialog() == DialogResult.OK) LoadData();
+            if (addMatHang.ShowDialog() == DialogResult.OK) TaiDuLieu();
         }
 
         private void GrMain_MouseDown(object sender, MouseEventArgs e)
@@ -108,7 +103,7 @@ namespace Project
 
         private void MnuRefresh_Click(object sender, EventArgs e)
         {
-            LoadData();
+            TaiDuLieu();
         }
 
         private void MnuDelete_Click(object sender, EventArgs e)
@@ -128,18 +123,30 @@ namespace Project
 
         private void TxtLoc_TextChanged(object sender, EventArgs e)
         {
-            LoadData();
+            TaiDuLieu();
         }
 
         private void DanhSachMatHang_Load(object sender, EventArgs e)
         {
-            LoadData();
+            TaiDuLieu();
         }
 
-        private void LoadData()
+        private void TaiDuLieu()
         {
-            grMain.DataSource = DMATHANGDAL.LoadData(txtLoc.Text.Trim());
+            grMain.DataSource = LoadData(txtLoc.Text.Trim());
             GrMain_SelectionChanged(null, null);
+        }
+
+        public static DataTable LoadData(string filter)
+        {
+            string query = "select * from dmathang";
+            if (filter.Length > 0)
+            {
+                query += " where code like N'%" + filter + "%' or name like N'%" + filter + "%'";
+            }
+            query += " order by name asc";
+            DataTable dt = Database.GetTable(query, null);
+            return dt;
         }
     }
 }

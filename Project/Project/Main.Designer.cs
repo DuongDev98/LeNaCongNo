@@ -41,7 +41,7 @@
             this.bÁOCÁOToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuTongHopCongNo = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuChiTietCongNo = new System.Windows.Forms.ToolStripMenuItem();
-            this.tabMain = new System.Windows.Forms.TabControl();
+            this.tabControl = new System.Windows.Forms.TabControl();
             this.menuMain.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -141,21 +141,22 @@
             this.mnuChiTietCongNo.Size = new System.Drawing.Size(172, 22);
             this.mnuChiTietCongNo.Text = "Chi tiết công nợ";
             // 
-            // tabMain
+            // tabControl
             // 
-            this.tabMain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabMain.Location = new System.Drawing.Point(0, 24);
-            this.tabMain.Name = "tabMain";
-            this.tabMain.SelectedIndex = 0;
-            this.tabMain.Size = new System.Drawing.Size(1350, 705);
-            this.tabMain.TabIndex = 3;
+            this.tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControl.ItemSize = new System.Drawing.Size(0, 25);
+            this.tabControl.Location = new System.Drawing.Point(0, 24);
+            this.tabControl.Name = "tabControl";
+            this.tabControl.SelectedIndex = 0;
+            this.tabControl.Size = new System.Drawing.Size(1350, 705);
+            this.tabControl.TabIndex = 3;
             // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1350, 729);
-            this.Controls.Add(this.tabMain);
+            this.Controls.Add(this.tabControl);
             this.Controls.Add(this.menuMain);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.IsMdiContainer = true;
@@ -185,6 +186,6 @@
         private System.Windows.Forms.ToolStripMenuItem bÁOCÁOToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem mnuTongHopCongNo;
         private System.Windows.Forms.ToolStripMenuItem mnuChiTietCongNo;
-        private System.Windows.Forms.TabControl tabMain;
+        private System.Windows.Forms.TabControl tabControl;
     }
 }

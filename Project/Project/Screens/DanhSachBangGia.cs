@@ -1,22 +1,16 @@
 ﻿using Project.Common;
-using Project.DAL;
 using Project.Forms;
 using Project.Model;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Project.Screens
 {
     public partial class DanhSachBangGia : Form
     {
-        DBANGGIADAL dBANGGIADAL = new DBANGGIADAL();
         public DanhSachBangGia()
         {
             InitializeComponent();
@@ -50,10 +44,10 @@ namespace Project.Screens
             {
                 foreach (DataRow rHoaDon in dtHoaDon.Rows)
                 {
-                    TDONHANG dhRow = new TDONHANG(rHoaDon, out error);
+                    TDONHANGRow dhRow = new TDONHANGRow(rHoaDon);
                     if (error.Length > 0) goto KetThuc;
                     //tìm bảng giá
-                    DBANGGIA bangGiaRow = TimBangGia(dtBangGia, dhRow);
+                    DBANGGIARow bangGiaRow = TimBangGia(dtBangGia, dhRow);
                     if (bangGiaRow == null)
                     {
                         error = "Ngày \"" + dhRow.NGAY.ToString("dd/MM/yyyy") + "\" không thuộc bảng giá nào";
@@ -65,7 +59,7 @@ namespace Project.Screens
                     DataRow[] rowChiTiets = dtChiTiet.Select(string.Format("TDONHANGID='{0}'", dhRow.ID));
                     foreach (DataRow rChiTiet in rowChiTiets)
                     {
-                        TDONHANGCHITIET ctRow = new TDONHANGCHITIET(rChiTiet, out error);
+                        TDONHANGCHITIETRow ctRow = new TDONHANGCHITIETRow(rChiTiet);
                         //lấy đơn giá
                         DataRow[] rDonGias = dtBangGiaChiTiet.Select(string.Format("DBANGGIAID='{0}' AND DMATHANGID='{1}'", bangGiaRow.ID, ctRow.DMATHANG.ID));
                         if (rDonGias.Length > 0)
@@ -107,12 +101,12 @@ namespace Project.Screens
 
             Msg.ShowInfo("Cập nhật tiền hóa đơn theo bảng giá thành công");
         }
-        private DBANGGIA TimBangGia(DataTable dtBangGia, TDONHANG dhRow)
+        private DBANGGIARow TimBangGia(DataTable dtBangGia, TDONHANGRow dhRow)
         {
-            DBANGGIA bangGiaRow = null;
+            DBANGGIARow bangGiaRow = null;
             foreach (DataRow rBangGia in dtBangGia.Rows)
             {
-                DBANGGIA tmp = new DBANGGIA(rBangGia);
+                DBANGGIARow tmp = new DBANGGIARow(rBangGia);
                 if (dhRow.NGAY >= tmp.TuNgay || dhRow.NGAY <= tmp.DenNgay)
                 {
                     bangGiaRow = tmp;
@@ -139,19 +133,19 @@ namespace Project.Screens
                 if (Msg.ShowYesNo(string.Format("Xóa {0} bảng giá đang chọn", grMain.SelectedRows.Count)) == DialogResult.Yes)
                 {
                     string error = "";
-                    List<string> ids = new List<string>();
                     foreach (DataGridViewRow r in grMain.SelectedRows)
                     {
-                        ids.Add((r.DataBoundItem as DataRowView).Row["ID"].ToString());
+                        DBANGGIARow bangGiaRow = new DBANGGIARow((r.DataBoundItem as DataRowView).Row["ID"].ToString());
+                        if (!bangGiaRow.Delete(out error)) break;
                     }
-                    dBANGGIADAL.Delete(ids, out error);
+
                     if (error.Length > 0)
                     {
                         Msg.ShowWarning(error);
                     }
                     else
                     {
-                        LoadData();
+                        TaiDuLieu();
                     }
                 }
             }
@@ -167,14 +161,14 @@ namespace Project.Screens
                 }
 
                 BangGiaForm editBangGia = new BangGiaForm(DBANGGIAID);
-                if (editBangGia.ShowDialog() == DialogResult.OK) LoadData();
+                if (editBangGia.ShowDialog() == DialogResult.OK) TaiDuLieu();
             }
         }
 
         private void TsbAdd_Click(object sender, EventArgs e)
         {
             BangGiaForm addBangGia = new BangGiaForm("");
-            if (addBangGia.ShowDialog() == DialogResult.OK) LoadData();
+            if (addBangGia.ShowDialog() == DialogResult.OK) TaiDuLieu();
         }
 
         private void GrMain_MouseDown(object sender, MouseEventArgs e)
@@ -194,7 +188,7 @@ namespace Project.Screens
 
         private void MnuRefresh_Click(object sender, EventArgs e)
         {
-            LoadData();
+            TaiDuLieu();
         }
 
         private void MnuDelete_Click(object sender, EventArgs e)
@@ -214,18 +208,62 @@ namespace Project.Screens
 
         private void TxtLoc_TextChanged(object sender, EventArgs e)
         {
-            LoadData();
+            TaiDuLieu();
         }
 
         private void DanhSachBangGia_Load(object sender, EventArgs e)
         {
-            LoadData();
+            TaiDuLieu();
         }
 
-        private void LoadData()
+        private void TaiDuLieu()
         {
-            grMain.DataSource = DBANGGIADAL.LoadData();
+            grMain.DataSource = LoadData();
             GrMain_SelectionChanged(null, null);
+        }
+
+        public static DataTable GetCreateDetailTable()
+        {
+            DataTable dt = new DataTable();
+            dt.Columns.Add("ID", typeof(string));
+            dt.Columns.Add("DBANGGIAID", typeof(string));
+            dt.Columns.Add("DMATHANGID", typeof(string));
+            dt.Columns.Add("DMATHANG_CODE", typeof(string));
+            dt.Columns.Add("DMATHANG_NAME", typeof(string));
+            dt.Columns.Add("DUOI1KG", typeof(int));
+            dt.Columns.Add("TU1KGTROLEN", typeof(int));
+            return dt;
+        }
+        public static DataTable LoadData()
+        {
+            string query = "select * from dbanggia order by name asc";
+            DataTable dt = Database.GetTable(query, null);
+            return dt;
+        }
+        public static List<DBANGGIACHITIETRow> LayDuLieuChiTiet(string DBANGGIAID, out string error)
+        {
+            Dictionary<string, object> dic = new Dictionary<string, object>
+            {
+                { "@id", DBANGGIAID }
+            };
+
+            DataTable dtChiTiet = Database.GetTable(@"select dbanggiachitiet.id, dmathang.id as dmathangid, dbanggiaid,
+            dmathang.code as dmathang_code, dmathang.name as dmathang_name, coalesce(duoi1kg, 0) as duoi1kg,
+            coalesce(tu1kgtrolen, 0) as tu1kgtrolen
+            from dmathang left outer join dbanggiachitiet on dmathangid = dmathang.id and dbanggiaid = @id
+            order by dmathang.name", dic, out error);
+
+            List<DBANGGIACHITIETRow> details = new List<DBANGGIACHITIETRow>();
+            foreach (DataRow rChiTiet in dtChiTiet.Rows)
+            {
+                DBANGGIACHITIETRow ctRow = new DBANGGIACHITIETRow(rChiTiet);
+                if (error.Length == 0)
+                {
+                    details.Add(ctRow);
+                }
+            }
+
+            return details;
         }
     }
 }

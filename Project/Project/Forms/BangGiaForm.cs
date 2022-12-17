@@ -1,33 +1,20 @@
 ﻿using Project.Common;
-using Project.DAL;
 using Project.Model;
+using Project.Screens;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Project.Forms
 {
     public partial class BangGiaForm : Form
     {
-        DBANGGIADAL dBANGGIADAL;
-        DMATHANGDAL dMATHANGDAL;
         string DBANGGIAID;
         public BangGiaForm(string DBANGGIAID)
         {
             InitializeComponent();
             this.DBANGGIAID = DBANGGIAID;
-
-            dBANGGIADAL = new DBANGGIADAL();
-            dMATHANGDAL = new DMATHANGDAL();
-
             splitMain.SplitterDistance = 100;
             dtTuNgay.CustomFormat = "dd/MM/yyyy";
             dtDenNgay.CustomFormat = "dd/MM/yyyy";
@@ -54,39 +41,14 @@ namespace Project.Forms
                 return;
             }
 
-            DBANGGIA bangGiaRow = new DBANGGIA();
+            DBANGGIARow bangGiaRow = new DBANGGIARow();
             bangGiaRow.ID = DBANGGIAID;
             bangGiaRow.TuNgay = dtTuNgay.Value.Date;
             bangGiaRow.DenNgay = dtDenNgay.Value.Date;
 
             DataTable dt = detail.DataSource as DataTable;
-
-            //StringBuilder sb = new StringBuilder("");
-            //foreach (DataRow row in dt.Rows)
-            //{
-            //    string DMATHANG_CODE = row["DMATHANG_CODE"].ToString();
-            //    string DMATHANG_NAME = row["DMATHANG_NAME"].ToString();
-
-            //    string line = "";
-            //    int tmp = int.Parse(row["DUOI1KG"].ToString());
-            //    if (tmp == 0) line += "dưới 1kg = 0";
-            //    if (line.Length > 0) line += ", ";
-            //    tmp = int.Parse(row["TU1KGTROLEN"].ToString());
-            //    if (tmp == 0) line += "từ 1kg trở lên = 0";
-
-            //    if (line.Length > 0)
-            //    {
-            //        sb.AppendLine(Environment.NewLine + "Mặt hàng có mã: " + DMATHANG_CODE + " " + line);
-            //    }
-            //}
-
-            //if (sb.Length > 0)
-            //{
-            //    Msg.ShowWarning(sb.ToString().Trim());
-            //}
-
             string error;
-            List<DBANGGIACHITIET> details = new List<DBANGGIACHITIET>();
+            List<DBANGGIACHITIETRow> details = new List<DBANGGIACHITIETRow>();
             foreach (DataRow row in dt.Rows)
             {
                 string DMATHANGID = row["DMATHANGID"].ToString();
@@ -95,13 +57,13 @@ namespace Project.Forms
 
                 if (duoi1kg > 0 || tu1kgtrolen > 0)
                 {
-                    DBANGGIACHITIET ctRow = new DBANGGIACHITIET(row, out error);
+                    DBANGGIACHITIETRow ctRow = new DBANGGIACHITIETRow(row);
                     details.Add(ctRow);
                 }
             }
             bangGiaRow.details = details;
 
-            if (dBANGGIADAL.InserOrEdit(bangGiaRow, out error))
+            if (bangGiaRow.Update(out error))
             {
                 Msg.ShowInfo("Lưu thành công bảng giá");
                 DBANGGIAID = bangGiaRow.ID;
@@ -122,19 +84,14 @@ namespace Project.Forms
         {
             string error;
             //tải thông tin hóa đơn
-            DBANGGIA bangGiaRow;
+            DBANGGIARow bangGiaRow;
             if (DBANGGIAID.Length == 0)
             {
-                bangGiaRow = new DBANGGIA();
+                bangGiaRow = new DBANGGIARow();
             }
             else
             {
-                bangGiaRow = dBANGGIADAL.Find(DBANGGIAID, out error);
-                if (error.Length > 0)
-                {
-                    Msg.ShowWarning(error);
-                    return;
-                }
+                bangGiaRow = new DBANGGIARow(DBANGGIAID);
             }
 
             //fill data
@@ -143,14 +100,14 @@ namespace Project.Forms
             dtDenNgay.Value = bangGiaRow.DenNgay;
 
             //fill details
-            DataTable dtDetails = DBANGGIADAL.GetCreateDetailTable();
-            bangGiaRow.details = DBANGGIADAL.LayDuLieuChiTiet(bangGiaRow.ID, out error);
+            DataTable dtDetails = DanhSachBangGia.GetCreateDetailTable();
+            bangGiaRow.details = DanhSachBangGia.LayDuLieuChiTiet(bangGiaRow.ID, out error);
             if (error.Length > 0)
             {
                 Msg.ShowWarning(error);
                 return;
             }
-            foreach (DBANGGIACHITIET ctRow in bangGiaRow.details)
+            foreach (DBANGGIACHITIETRow ctRow in bangGiaRow.details)
             {
                 DataRow newRow = dtDetails.NewRow();
                 newRow["ID"] = ctRow.ID;

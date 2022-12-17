@@ -126,7 +126,6 @@ namespace Project.Common
             }
             catch (Exception ex)
             {
-                error = ex.ToString();
                 return false;
             }
             finally
@@ -144,7 +143,9 @@ namespace Project.Common
             {
                 foreach (string key in attrs.Keys)
                 {
-                    Type typeData = attrs[key].GetType();
+                    object value = attrs[key];
+                    if (value == null) continue;
+                    Type typeData = value.GetType();
                     if (typeData == typeof(int)) cmd.Parameters.Add(key, SqlDbType.Int).Value = attrs[key];
                     else if (typeData == typeof(decimal)) cmd.Parameters.Add(key, SqlDbType.Decimal).Value = attrs[key];
                     else if (typeData == typeof(string)) cmd.Parameters.Add(key, SqlDbType.NVarChar).Value = attrs[key];
@@ -153,7 +154,7 @@ namespace Project.Common
             }
         }
 
-        public static string GenCode(string table)
+        public static string GenCode(string field, string table)
         {
             int maxLength = 8;
             string code = "";
@@ -164,7 +165,7 @@ namespace Project.Common
             else if (table == "TTHANHTOAN") code = "TT";
 
             int stt = 0;
-            string data = GetFirstFieldString(string.Format("SELECT MAX(CODE) FROM {0}", table), null);
+            string data = GetFirstFieldString(string.Format("SELECT MAX({0}) FROM {1}", field, table), null);
             if (data != null && data.Length > 0)
             {
                 data = data.Replace(code, "");

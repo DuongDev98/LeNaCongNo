@@ -1,16 +1,8 @@
 ﻿using Project.Common;
-using Project.DAL;
-using Project.Model;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Xml.Linq;
 
 namespace Project.Screens
 {
@@ -27,7 +19,7 @@ namespace Project.Screens
             cbKhachHang.AutoCompleteSource = AutoCompleteSource.ListItems;
             cbKhachHang.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
             cbKhachHang.Cursor = Cursors.Default;
-            cbKhachHang.DataSource = new DKHACHHANGDAL().List("");
+            cbKhachHang.DataSource = DanhSachKhachHang.List("");
 
             btnLoc.Click += BtnLoc_Click;
         }
