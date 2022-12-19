@@ -20,3 +20,5 @@ H:\PHUONG\DoiNo\Project\Project\obj\Debug\Project.Forms.BangGiaForm.resources
 H:\PHUONG\DoiNo\Project\Project\obj\Debug\Project.Screens.QuanLyBanHang.resources
 H:\PHUONG\DoiNo\Project\Project\obj\Debug\Project.Screens.TongHopCongNo.resources
 H:\PHUONG\DoiNo\Project\Project\obj\Debug\Project.Screens.ChiTietCongNo.resources
+H:\PHUONG\DoiNo\Project\Project\obj\Debug\Project.Screens.QuanLyThanhToan.resources
+H:\PHUONG\DoiNo\Project\Project\obj\Debug\Project.Forms.ThanhToanForm.resources

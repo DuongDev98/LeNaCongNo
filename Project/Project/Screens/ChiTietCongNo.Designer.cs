@@ -108,15 +108,18 @@
             this.detail.Location = new System.Drawing.Point(0, 0);
             this.detail.Name = "detail";
             this.detail.ReadOnly = true;
+            this.detail.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.detail.Size = new System.Drawing.Size(800, 414);
             this.detail.TabIndex = 1;
             // 
             // Column6
             // 
+            this.Column6.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
             this.Column6.DataPropertyName = "STT";
             this.Column6.HeaderText = "STT";
             this.Column6.Name = "Column6";
             this.Column6.ReadOnly = true;
+            this.Column6.Width = 53;
             // 
             // Column1
             // 

@@ -69,7 +69,7 @@ namespace Project.Model
                 return false;
             }
 
-            if (ID.Length == 0)
+            if (ID == null || ID.Length == 0)
             {
                 ID = Guid.NewGuid().ToString();
                 CODE = Database.GenCode("CODE", "DKHACHHANG");

@@ -20,8 +20,14 @@ namespace Project.Screens
             cbKhachHang.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
             cbKhachHang.Cursor = Cursors.Default;
             cbKhachHang.DataSource = DanhSachKhachHang.List("");
+            cbKhachHang.Click += CbKhachHang_Click;
 
             btnLoc.Click += BtnLoc_Click;
+        }
+
+        private void CbKhachHang_Click(object sender, EventArgs e)
+        {
+            if (cbKhachHang.Focused) cbKhachHang.DroppedDown = true;
         }
 
         private void BtnLoc_Click(object sender, EventArgs e)

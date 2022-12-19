@@ -19,6 +19,14 @@ namespace Project.Model
             DenNgay = DateTime.Now;
             details = new List<DBANGGIACHITIETRow>();
         }
+        public DBANGGIARow(DataRow row)
+        {
+            ID = row["ID"].ToString();
+            NAME = row["NAME"].ToString();
+            TuNgay = DateTime.Parse(row["TUNGAY"].ToString());
+            DenNgay = DateTime.Parse(row["DENNGAY"].ToString());
+            details = LayChiTietBangGia();
+        }
         public DBANGGIARow(string DBANGGIAID)
         {
             ID = DBANGGIAID;
@@ -39,32 +47,28 @@ namespace Project.Model
                     NAME = row["NAME"].ToString();
                     TuNgay = DateTime.Parse(row["TUNGAY"].ToString());
                     DenNgay = DateTime.Parse(row["DENNGAY"].ToString());
-                    //Lấy chi tiết hóa đơn
-                    List<DBANGGIACHITIETRow> lst = new List<DBANGGIACHITIETRow>();
-                    DataTable dtChiTiet = Database.GetTable("select * from dbanggiachitiet where dbanggiaid = @id", attrs);
-                    foreach (DataRow rChiTiet in dtChiTiet.Rows)
-                    {
-                        DBANGGIACHITIETRow ctRow = new DBANGGIACHITIETRow(rChiTiet);
-                        lst.Add(ctRow);
-                    }
-                    details = lst;
+                    details = LayChiTietBangGia();
                 }
             }
         }
-        public DBANGGIARow(DataRow row)
+
+        private List<DBANGGIACHITIETRow> LayChiTietBangGia()
         {
-            ID = row["ID"].ToString();
-            NAME = row["NAME"].ToString();
-            TuNgay = DateTime.Parse(row["TUNGAY"].ToString());
-            DenNgay = DateTime.Parse(row["DENNGAY"].ToString());
-            details = new List<DBANGGIACHITIETRow>();
+            List<DBANGGIACHITIETRow> lst = new List<DBANGGIACHITIETRow>();
+            DataTable dtChiTiet = Database.GetTable("select * from dbanggiachitiet where dbanggiaid = @id", attrs);
+            foreach (DataRow rChiTiet in dtChiTiet.Rows)
+            {
+                DBANGGIACHITIETRow ctRow = new DBANGGIACHITIETRow(rChiTiet);
+                lst.Add(ctRow);
+            }
+            return lst;
         }
         public override bool Update(out string error)
         {
             error = "";
 
             bool kq = true;
-            if (ID.Length == 0)
+            if (ID == null || ID.Length == 0)
             {
                 ID = Guid.NewGuid().ToString();
                 NAME = Database.GenCode("NAME", "DBANGGIA");
@@ -72,41 +76,26 @@ namespace Project.Model
                 Database.ExcuteQuery(@"insert into dbanggia(id, name, tungay, denngay)
                 values(@id, @name, @tungay, @denngay)", attrs, out error);
                 if (error.Length > 0) kq = false;
-                else
-                {
-                    AddDetail(out error);
-                    if (error.Length > 0) kq = false;
-                }
             }
             else
             {
                 Database.ExcuteQuery(@"update dbanggia set tungay = @tungay, denngay = @denngay where id = @id", attrs, out error);
                 if (error.Length > 0) kq = false;
-                else
-                {
-                    Database.ExcuteQuery(@"delete from dbanggiachitiet where dbanggiaid = @id", attrs, out error);
-                    if (error.Length > 0) kq = false;
-                    else
-                    {
-                        AddDetail(out error);
-                        if (error.Length > 0) kq = false;
-                    }
-                }
             }
             return kq;
         }
 
-        private void AddDetail(out string error)
-        {
-            error = "";
-            foreach (Dictionary<string, object> dic in attrsDetails)
-            {
-                dic["@id"] = Guid.NewGuid().ToString();
-                Database.ExcuteQuery(@"insert into dbanggiachitiet(id, dbanggiaid, dmathangid, duoi1kg, tu1kgtrolen)
-                values(@id, @dbanggiaid, @dmathangid, @duoi1kg, @tu1kgtrolen)", dic, out error);
-                if (error.Length > 0) break;
-            }
-        }
+        //private void AddDetail(out string error)
+        //{
+        //    error = "";
+        //    foreach (Dictionary<string, object> dic in attrsDetails)
+        //    {
+        //        dic["@id"] = Guid.NewGuid().ToString();
+        //        Database.ExcuteQuery(@"insert into dbanggiachitiet(id, dbanggiaid, dmathangid, duoi1kg, tu1kgtrolen)
+        //        values(@id, @dbanggiaid, @dmathangid, @duoi1kg, @tu1kgtrolen)", dic, out error);
+        //        if (error.Length > 0) break;
+        //    }
+        //}
 
         public override bool Delete(out string error)
         {

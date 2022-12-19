@@ -56,7 +56,7 @@ namespace Project.Model
         public override bool Update(out string error)
         {
             error = "";
-            if (ID.Length == 0)
+            if (ID == null || ID.Length == 0)
             {
                 ID = Guid.NewGuid().ToString();
                 Database.ExcuteQuery(@"insert into dbanggiachitiet(id, dbanggiaid, dmathangid, duoi1kg, tu1kgtrolen)

@@ -28,7 +28,7 @@ namespace Project.Model
         public override bool Update(out string error)
         {
             error = "";
-            if (ID.Length == 0)
+            if (ID == null || ID.Length == 0)
             {
                 ID = Guid.NewGuid().ToString();
                 Database.ExcuteQuery(@"insert into tdonhangchitiet(id, tdonhangid, dmathangid, dongia, soluong, thanhtien)

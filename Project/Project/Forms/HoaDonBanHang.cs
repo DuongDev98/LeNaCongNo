@@ -37,6 +37,12 @@ namespace Project
             cbKhachHang.AutoCompleteSource = AutoCompleteSource.ListItems;
             cbKhachHang.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
             cbKhachHang.Cursor = Cursors.Default;
+            cbKhachHang.Click += CbKhachHang_Click;
+        }
+
+        private void CbKhachHang_Click(object sender, EventArgs e)
+        {
+            if (cbKhachHang.Focused) cbKhachHang.DroppedDown = true;
         }
 
         private void HoaDonBanHang_Load(object sender, EventArgs e)
@@ -192,35 +198,41 @@ namespace Project
             }
 
             //Lưu dữ liệu
-            TDONHANGRow dhRow = new TDONHANGRow();
-            dhRow.ID = TDONHANGID;
+            TDONHANGRow dhRow = new TDONHANGRow(TDONHANGID);
             dhRow.NGAY = dtNgay.Value.Date;
-            dhRow.NAME = dhRow.NAME;
+            dhRow.NAME = txtNAME.Text;
             dhRow.DKHACHHANG = khRow;
             dhRow.NOTE = txtNOTE.Text.Trim();
 
             //Lấy dữ liệu chi tiết
             string error;
-            List<TDONHANGCHITIETRow> lst = new List<TDONHANGCHITIETRow>();
-            foreach (DataRow row in dtChiTiet.Rows)
-            {
-                string DMATHANGID = row["DMATHANGID"].ToString();
-                TDONHANGCHITIETRow ctRow = new TDONHANGCHITIETRow();
-                ctRow.DMATHANG = new DMATHANGRow(DMATHANGID);
-                ctRow.SOLUONG = decimal.Parse(row["SOLUONG"].ToString());
-                ctRow.DONGIA = int.Parse(row["DONGIA"].ToString());
-                ctRow.THANHTIEN = (int)(ctRow.SOLUONG * ctRow.DONGIA);
-                lst.Add(ctRow);
-            }
-            dhRow.details = lst;
-
             if (dhRow.Update(out error))
             {
+                Dictionary<string, object> dic = new Dictionary<string, object>();
+                dic.Add("@tdonhangid", dhRow.ID);
+                Database.ExcuteQuery(@"delete from tdonhangchitiet where tdonhangid = @tdonhangid", dic, out error);
+
+                foreach (DataRow row in dtChiTiet.Rows)
+                {
+                    string DMATHANGID = row["DMATHANGID"].ToString();
+                    TDONHANGCHITIETRow ctRow = new TDONHANGCHITIETRow();
+                    ctRow.DMATHANG = new DMATHANGRow(DMATHANGID);
+                    ctRow.SOLUONG = decimal.Parse(row["SOLUONG"].ToString());
+                    ctRow.DONGIA = int.Parse(row["DONGIA"].ToString());
+                    ctRow.THANHTIEN = (int)(ctRow.SOLUONG * ctRow.DONGIA);
+                    ctRow.TDONHANGID = dhRow.ID;
+                    ctRow.Update();
+                }
+
                 //mở hóa đơn mới nếu không phải quản lý bán hàng
                 if (TDONHANGID.Length == 0)
                 {
                     Msg.ShowInfo("Lưu hóa đơn thành công");
                     Reload();
+                }
+                else
+                {
+                    Msg.ShowInfo("Cập nhật hóa đơn thành công");
                 }
             }
             else

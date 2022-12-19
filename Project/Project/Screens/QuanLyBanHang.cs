@@ -33,6 +33,7 @@ namespace Project.Screens
             cbKhachHang.AutoCompleteSource = AutoCompleteSource.ListItems;
             cbKhachHang.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
             cbKhachHang.Cursor = Cursors.Default;
+            cbKhachHang.Click += CbKhachHang_Click;
 
             dtTuNgay.CustomFormat = "dd/MM/yyyy";
             dtDenNgay.CustomFormat = "dd/MM/yyyy";
@@ -40,6 +41,11 @@ namespace Project.Screens
 
             grHoaDon.SelectionChanged += GrHoaDon_SelectionChanged;
             btnLoc.Click += BtnLoc_Click;
+        }
+
+        private void CbKhachHang_Click(object sender, EventArgs e)
+        {
+            if (cbKhachHang.Focused) cbKhachHang.DroppedDown = true;
         }
 
         private void AddColumnDetail(DataGridView detail)
@@ -76,7 +82,8 @@ namespace Project.Screens
             dic.Add("@dkhachhangid", DKHACHHANGID);
             DataTable dt = Database.GetTable(@"select tdonhang.*, (select name from dkhachhang where id = dkhachhangid) as dkhachhang_name
             from tdonhang where ngay between @tungay and @denngay
-            and (dkhachhangid = @dkhachhangid or cast(@dkhachhangid as varchar(36))='')", dic, out error);
+            and (dkhachhangid = @dkhachhangid or cast(@dkhachhangid as varchar(36))='')
+            order by tdonhang.ngay, tdonhang.name asc", dic, out error);
             return dt;
         }
 

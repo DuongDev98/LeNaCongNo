@@ -39,7 +39,7 @@ create table tdonhang
 	ngay date,
 	name nvarchar(255),
 	dkhachhangid varchar(36),
-	note nvarchar(255),
+	note nvarchar(max),
 	tongcong int
 )
 go
@@ -59,5 +59,6 @@ create table tthanhtoan
 	ngay date,
 	name nvarchar(255),
 	dkhachhangid varchar(36),
-	tongcong int
+	tongcong int,
+	note nvarchar(max)
 )

@@ -75,11 +75,18 @@
     <Compile Include="Forms\NhapSoLuong.Designer.cs">
       <DependentUpon>NhapSoLuong.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\ThanhToanForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ThanhToanForm.Designer.cs">
+      <DependentUpon>ThanhToanForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Model\DBANGGIARow.cs" />
     <Compile Include="Model\DBANGGIACHITIETRow.cs" />
     <Compile Include="Model\DKHACHHANGRow.cs" />
     <Compile Include="Model\DMATHANGRow.cs" />
     <Compile Include="Model\AbstractClass\ModelRow.cs" />
+    <Compile Include="Model\TTHANHTOANRow.cs" />
     <Compile Include="Model\TDONHANGRow.cs" />
     <Compile Include="Model\TDONHANGCHITIETRow.cs" />
     <Compile Include="Screens\ChiTietCongNo.cs">
@@ -106,10 +113,10 @@
     <Compile Include="Screens\DanhSachMatHang.Designer.cs">
       <DependentUpon>DanhSachMatHang.cs</DependentUpon>
     </Compile>
-    <Compile Include="Screens\HoaDonBanHang.cs">
+    <Compile Include="Forms\HoaDonBanHang.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Screens\HoaDonBanHang.Designer.cs">
+    <Compile Include="Forms\HoaDonBanHang.Designer.cs">
       <DependentUpon>HoaDonBanHang.cs</DependentUpon>
     </Compile>
     <Compile Include="Main.cs">
@@ -125,6 +132,12 @@
     </Compile>
     <Compile Include="Screens\QuanLyBanHang.Designer.cs">
       <DependentUpon>QuanLyBanHang.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Screens\QuanLyThanhToan.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Screens\QuanLyThanhToan.Designer.cs">
+      <DependentUpon>QuanLyThanhToan.cs</DependentUpon>
     </Compile>
     <Compile Include="Screens\TongHopCongNo.cs">
       <SubType>Form</SubType>
@@ -144,6 +157,9 @@
     <EmbeddedResource Include="Forms\NhapSoLuong.resx">
       <DependentUpon>NhapSoLuong.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ThanhToanForm.resx">
+      <DependentUpon>ThanhToanForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Screens\ChiTietCongNo.resx">
       <DependentUpon>ChiTietCongNo.cs</DependentUpon>
     </EmbeddedResource>
@@ -156,7 +172,7 @@
     <EmbeddedResource Include="Screens\DanhSachMatHang.resx">
       <DependentUpon>DanhSachMatHang.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Screens\HoaDonBanHang.resx">
+    <EmbeddedResource Include="Forms\HoaDonBanHang.resx">
       <DependentUpon>HoaDonBanHang.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Main.resx">
@@ -170,9 +186,13 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <EmbeddedResource Include="Screens\QuanLyBanHang.resx">
       <DependentUpon>QuanLyBanHang.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Screens\QuanLyThanhToan.resx">
+      <DependentUpon>QuanLyThanhToan.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Screens\TongHopCongNo.resx">
       <DependentUpon>TongHopCongNo.cs</DependentUpon>

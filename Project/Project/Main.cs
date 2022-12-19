@@ -1,4 +1,5 @@
-﻿using Project.Screens;
+﻿using Project.Forms;
+using Project.Screens;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -22,10 +23,14 @@ namespace Project
             mnuDanhMucKhachHang.Click += MnuDanhMucKhachHang_Click;
             mnuDanhMucBangGia.Click += MnuDanhMucBangGia_Click;
             mnuQuanLyBanHang.Click += MnuQuanLyBanHang_Click;
+            mnuQuanLyThanhToan.Click += MnuQuanLyThanhToan_Click;
             mnuTongHopCongNo.Click += MnuTongHopCongNo_Click;
             mnuChiTietCongNo.Click += MnuChiTietCongNo_Click;
-            tabControl.ItemSize = new Size(150, 0);
-            MnuHoaDonBanHang_Click(null, null);
+        }
+
+        private void MnuQuanLyThanhToan_Click(object sender, EventArgs e)
+        {
+            OpenTapMain(new QuanLyThanhToan());
         }
 
         private void MnuChiTietCongNo_Click(object sender, EventArgs e)
@@ -95,11 +100,52 @@ namespace Project
         }
         private void tabControl_MouseDown(object sender, MouseEventArgs e)
         {
-
+            Rectangle r = tabControl.GetTabRect(this.tabControl.SelectedIndex);
+            Rectangle closeButton = new Rectangle(r.Right - 20, r.Top + (r.Height - 20) / 2, 25, 25);
+            if (closeButton.Contains(e.Location))
+            {
+                tabControl.TabPages.Remove(tabControl.SelectedTab);
+            }
         }
         private void tabControl_DrawItem(object sender, DrawItemEventArgs e)
         {
+            bool selectedPage = tabControl.SelectedTab == tabControl.TabPages[e.Index];
 
+            //reset title
+            e.Graphics.FillRectangle(new SolidBrush(selectedPage ? Color.White : Color.WhiteSmoke), e.Bounds);
+
+            //vẽ nút close
+            int btnCloseWidth = 20, btnCloseHeight = 20, leftBtnClose = e.Bounds.Right - btnCloseWidth - 5, topBtnClose = e.Bounds.Top + (e.Bounds.Height - btnCloseHeight) / 2;
+            Rectangle btnClose = new Rectangle(leftBtnClose, topBtnClose, 20, 20);
+            e.Graphics.FillRectangle(new SolidBrush(Color.OrangeRed), btnClose);
+
+            SizeF size = CalculateSizeText(e.Font, "X");
+            e.Graphics.DrawString("X", e.Font, Brushes.White, btnClose.Left + (btnClose.Width - size.Width) / 2, btnClose.Top + (btnClose.Height - size.Height) / 2);
+
+            //Title page
+            //Lấy dữ liệu tối đa có thể hiển thị
+            string pageTitle = tabControl.TabPages[e.Index].Text;
+
+            string lastTile = "";
+            bool oversizeText = CalculateSizeText(e.Font, pageTitle).Width > e.Bounds.Width - btnCloseWidth - 5;
+            for (int i = 0; i < pageTitle.Length; i++)
+            {
+                //hiển thị thêm ... khi dữ liệu dài hơn vùng hiển thị
+                string temp = pageTitle.Substring(0, i + 1) + (oversizeText ? "..." : "");
+                if (CalculateSizeText(e.Font, temp).Width < e.Bounds.Width - btnCloseWidth - 5)
+                {
+                    lastTile = temp;
+                    size = CalculateSizeText(e.Font, temp);
+                }
+                else break;
+            }
+            RectangleF rectangleF = new RectangleF(e.Bounds.Left + 5, e.Bounds.Top + (e.Bounds.Height - size.Height) / 2, leftBtnClose, e.Bounds.Height);
+            e.Graphics.DrawString(lastTile, e.Font, Brushes.Black, rectangleF);
+
+            Rectangle customSize = e.Bounds;
+            customSize.Width = (int)CalculateSizeText(e.Font, pageTitle).Width + btnCloseWidth + 5;
+
+            e.DrawFocusRectangle();
         }
 
         private SizeF CalculateSizeText(Font font, string text)

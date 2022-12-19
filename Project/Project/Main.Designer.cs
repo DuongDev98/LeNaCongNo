@@ -36,7 +36,6 @@
             this.mnuHoaDonBanHang = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuQuanLyBanHang = new System.Windows.Forms.ToolStripMenuItem();
             this.cÔNGNỢToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnuThemMoiThanhToan = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuQuanLyThanhToan = new System.Windows.Forms.ToolStripMenuItem();
             this.bÁOCÁOToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuTongHopCongNo = new System.Windows.Forms.ToolStripMenuItem();
@@ -102,22 +101,15 @@
             // cÔNGNỢToolStripMenuItem
             // 
             this.cÔNGNỢToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnuThemMoiThanhToan,
             this.mnuQuanLyThanhToan});
             this.cÔNGNỢToolStripMenuItem.Name = "cÔNGNỢToolStripMenuItem";
             this.cÔNGNỢToolStripMenuItem.Size = new System.Drawing.Size(74, 20);
             this.cÔNGNỢToolStripMenuItem.Text = "CÔNG NỢ";
             // 
-            // mnuThemMoiThanhToan
-            // 
-            this.mnuThemMoiThanhToan.Name = "mnuThemMoiThanhToan";
-            this.mnuThemMoiThanhToan.Size = new System.Drawing.Size(189, 22);
-            this.mnuThemMoiThanhToan.Text = "Thêm mới thanh toán";
-            // 
             // mnuQuanLyThanhToan
             // 
             this.mnuQuanLyThanhToan.Name = "mnuQuanLyThanhToan";
-            this.mnuQuanLyThanhToan.Size = new System.Drawing.Size(189, 22);
+            this.mnuQuanLyThanhToan.Size = new System.Drawing.Size(176, 22);
             this.mnuQuanLyThanhToan.Text = "Quản lý thanh toán";
             // 
             // bÁOCÁOToolStripMenuItem
@@ -144,12 +136,16 @@
             // tabControl
             // 
             this.tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControl.ItemSize = new System.Drawing.Size(0, 25);
+            this.tabControl.DrawMode = System.Windows.Forms.TabDrawMode.OwnerDrawFixed;
+            this.tabControl.ItemSize = new System.Drawing.Size(150, 25);
             this.tabControl.Location = new System.Drawing.Point(0, 24);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
             this.tabControl.Size = new System.Drawing.Size(1350, 705);
+            this.tabControl.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
             this.tabControl.TabIndex = 3;
+            this.tabControl.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.tabControl_DrawItem);
+            this.tabControl.MouseDown += new System.Windows.Forms.MouseEventHandler(this.tabControl_MouseDown);
             // 
             // Main
             // 
@@ -181,7 +177,6 @@
         private System.Windows.Forms.ToolStripMenuItem mnuHoaDonBanHang;
         private System.Windows.Forms.ToolStripMenuItem mnuQuanLyBanHang;
         private System.Windows.Forms.ToolStripMenuItem cÔNGNỢToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem mnuThemMoiThanhToan;
         private System.Windows.Forms.ToolStripMenuItem mnuQuanLyThanhToan;
         private System.Windows.Forms.ToolStripMenuItem bÁOCÁOToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem mnuTongHopCongNo;
