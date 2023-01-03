@@ -31,12 +31,12 @@ namespace Project.Model
             if (ID == null || ID.Length == 0)
             {
                 ID = Guid.NewGuid().ToString();
-                Database.ExcuteQuery(@"insert into tdonhangchitiet(id, tdonhangid, dmathangid, dongia, soluong, thanhtien)
+                DatabaseSql.ExcuteQuery(@"insert into tdonhangchitiet(id, tdonhangid, dmathangid, dongia, soluong, thanhtien)
                 values(@id, @tdonhangid, @dmathangid, @dongia, @soluong, @thanhtien)", attrs);
             }
             else
             {
-                Database.ExcuteQuery(@"update tdonhangchitiet set tdonhangid=@tdonhangid, dmathangid=@dmathangid,
+                DatabaseSql.ExcuteQuery(@"update tdonhangchitiet set tdonhangid=@tdonhangid, dmathangid=@dmathangid,
                 dongia=@dongia, soluong=@soluong, thanhtien=@thanhtien where id = @id", attrs);
             }
             return true;
@@ -46,7 +46,7 @@ namespace Project.Model
         {
             error = "";
             if (ID.Length == 0) return false;
-            Database.ExcuteQuery("delete from tdonhangchitiet where id = @id", attrs);
+            DatabaseSql.ExcuteQuery("delete from tdonhangchitiet where id = @id", attrs);
             return true;
         }
         private Dictionary<string, object> attrs

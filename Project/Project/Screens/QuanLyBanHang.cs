@@ -80,7 +80,7 @@ namespace Project.Screens
             dic.Add("@tungay", fromDate);
             dic.Add("@denngay", toDate);
             dic.Add("@dkhachhangid", DKHACHHANGID);
-            DataTable dt = Database.GetTable(@"select tdonhang.*, (select name from dkhachhang where id = dkhachhangid) as dkhachhang_name
+            DataTable dt = DatabaseSql.GetTable(@"select tdonhang.*, (select name from dkhachhang where id = dkhachhangid) as dkhachhang_name
             from tdonhang where ngay between @tungay and @denngay
             and (dkhachhangid = @dkhachhangid or cast(@dkhachhangid as varchar(36))='')
             order by tdonhang.ngay, tdonhang.name asc", dic, out error);

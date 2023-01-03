@@ -49,7 +49,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Common\Database.cs" />
+    <Compile Include="Common\Connection.cs" />
+    <Compile Include="Common\DatabaseSql.cs" />
+    <Compile Include="Common\DatabaseFirebird.cs" />
     <Compile Include="Common\Msg.cs" />
     <Compile Include="Forms\BangGiaForm.cs">
       <SubType>Form</SubType>
@@ -139,6 +141,18 @@
     <Compile Include="Screens\QuanLyThanhToan.Designer.cs">
       <DependentUpon>QuanLyThanhToan.cs</DependentUpon>
     </Compile>
+    <Compile Include="Screens\Query.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Screens\Query.Designer.cs">
+      <DependentUpon>Query.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Screens\SetConnection.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Screens\SetConnection.Designer.cs">
+      <DependentUpon>SetConnection.cs</DependentUpon>
+    </Compile>
     <Compile Include="Screens\TongHopCongNo.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -193,6 +207,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Screens\QuanLyThanhToan.resx">
       <DependentUpon>QuanLyThanhToan.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Screens\Query.resx">
+      <DependentUpon>Query.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Screens\SetConnection.resx">
+      <DependentUpon>SetConnection.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Screens\TongHopCongNo.resx">
       <DependentUpon>TongHopCongNo.cs</DependentUpon>

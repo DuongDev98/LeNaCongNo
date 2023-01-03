@@ -33,7 +33,7 @@ namespace Project.Model
             }
             else
             {
-                DataRow row = Database.GetFirstRow("select * from dmathang where id = @id", attrs);
+                DataRow row = DatabaseSql.GetFirstRow("select * from dmathang where id = @id", attrs);
                 if (row != null)
                 {
                     ID = row["ID"].ToString();
@@ -59,12 +59,12 @@ namespace Project.Model
             if (ID == null || ID.Length == 0)
             {
                 ID = Guid.NewGuid().ToString();
-                Database.ExcuteQuery(@"insert into dbanggiachitiet(id, dbanggiaid, dmathangid, duoi1kg, tu1kgtrolen)
+                DatabaseSql.ExcuteQuery(@"insert into dbanggiachitiet(id, dbanggiaid, dmathangid, duoi1kg, tu1kgtrolen)
                 values(@id, @dbanggiaid, @dmathangid, @duoi1kg, @tu1kgtrolen)", attrs);
             }
             else
             {
-                Database.ExcuteQuery(@"update dbanggiachitiet set dbanggiaid=@dbanggiaid, dmathangid=@dmathangid,
+                DatabaseSql.ExcuteQuery(@"update dbanggiachitiet set dbanggiaid=@dbanggiaid, dmathangid=@dmathangid,
                 duoi1kg=@duoi1kg, tu1kgtrolen=@tu1kgtrolen where id = @id", attrs);
             }
             return true;
@@ -74,7 +74,7 @@ namespace Project.Model
         {
             error = "";
             if (ID.Length == 0) return false;
-            Database.ExcuteQuery("delete from dbanggiachitiet where id = @id", attrs);
+            DatabaseSql.ExcuteQuery("delete from dbanggiachitiet where id = @id", attrs);
             return true;
         }
 

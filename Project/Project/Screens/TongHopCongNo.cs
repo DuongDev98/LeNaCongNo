@@ -36,7 +36,7 @@ namespace Project.Screens
             )t
             where numcongno <> 0
             order by name asc";
-            DataTable dt = Database.GetTable(query, null);
+            DataTable dt = DatabaseSql.GetTable(query, null);
             int stt = 1;
             foreach (DataRow row in dt.Rows)
             {

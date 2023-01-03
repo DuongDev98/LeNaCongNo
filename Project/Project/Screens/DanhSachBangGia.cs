@@ -34,10 +34,10 @@ namespace Project.Screens
         private void BtnTinhTien_Click(object sender, EventArgs e)
         {
             StringBuilder sbError = new StringBuilder();
-            DataTable dtHoaDon = Database.GetTable("select * from tdonhang order by ngay asc", null);
-            DataTable dtChiTiet = Database.GetTable("select * from tdonhangchitiet", null);
-            DataTable dtBangGia = Database.GetTable("select * from dbanggia", null);
-            DataTable dtBangGiaChiTiet = Database.GetTable("select * from dbanggiachitiet", null);
+            DataTable dtHoaDon = DatabaseSql.GetTable("select * from tdonhang order by ngay asc", null);
+            DataTable dtChiTiet = DatabaseSql.GetTable("select * from tdonhangchitiet", null);
+            DataTable dtBangGia = DatabaseSql.GetTable("select * from dbanggia", null);
+            DataTable dtBangGiaChiTiet = DatabaseSql.GetTable("select * from dbanggiachitiet", null);
 
             string error = "";
             try
@@ -237,7 +237,7 @@ namespace Project.Screens
         public static DataTable LoadData()
         {
             string query = "select * from dbanggia order by name asc";
-            DataTable dt = Database.GetTable(query, null);
+            DataTable dt = DatabaseSql.GetTable(query, null);
             return dt;
         }
         public static List<DBANGGIACHITIETRow> LayDuLieuChiTiet(string DBANGGIAID, out string error)
@@ -247,7 +247,7 @@ namespace Project.Screens
                 { "@id", DBANGGIAID }
             };
 
-            DataTable dtChiTiet = Database.GetTable(@"select dbanggiachitiet.id, dmathang.id as dmathangid, dbanggiaid,
+            DataTable dtChiTiet = DatabaseSql.GetTable(@"select dbanggiachitiet.id, dmathang.id as dmathangid, dbanggiaid,
             dmathang.code as dmathang_code, dmathang.name as dmathang_name, coalesce(duoi1kg, 0) as duoi1kg,
             coalesce(tu1kgtrolen, 0) as tu1kgtrolen
             from dmathang left outer join dbanggiachitiet on dmathangid = dmathang.id and dbanggiaid = @id

@@ -13,12 +13,11 @@ namespace Project
         public Action DeleteSuccess;
         string TDONHANGID = "";
 
-        public void SetData(string TDONHANGID)
+        public void SetData(string ID)
         {
-            this.TDONHANGID = TDONHANGID;
             Enabled = this.TDONHANGID.Length > 0;
             btnHuy.Enabled = TDONHANGID.Length > 0;
-            Reload();
+            Reload(ID);
         }
 
         public HoaDonBanHang(string TDONHANGID)
@@ -50,11 +49,12 @@ namespace Project
             splitMain2.SplitterDistance = 85;
             LoadDanhSachMatHang();
             cbKhachHang.DataSource = DanhSachKhachHang.List("");
-            Reload();
+            Reload("");
             detail_SelectionChanged(null, null);
         }
-        private void Reload()
+        private void Reload(string ID)
         {
+            TDONHANGID = ID??"";
             //tải thông tin hóa đơn
             TDONHANGRow dhRow;
             if (TDONHANGID.Length == 0)
@@ -210,7 +210,7 @@ namespace Project
             {
                 Dictionary<string, object> dic = new Dictionary<string, object>();
                 dic.Add("@tdonhangid", dhRow.ID);
-                Database.ExcuteQuery(@"delete from tdonhangchitiet where tdonhangid = @tdonhangid", dic, out error);
+                DatabaseSql.ExcuteQuery(@"delete from tdonhangchitiet where tdonhangid = @tdonhangid", dic, out error);
 
                 foreach (DataRow row in dtChiTiet.Rows)
                 {
@@ -228,7 +228,7 @@ namespace Project
                 if (TDONHANGID.Length == 0)
                 {
                     Msg.ShowInfo("Lưu hóa đơn thành công");
-                    Reload();
+                    Reload("");
                 }
                 else
                 {

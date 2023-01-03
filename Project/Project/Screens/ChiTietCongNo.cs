@@ -51,7 +51,7 @@ namespace Project.Screens
                 select ngay, '', name, 0, tongcong, '', '', '' from tthanhtoan where dkhachhangid = @dkhachhangid
             ) t
             order by ngay, name asc";
-            DataTable dt = Database.GetTable(query, attrs);
+            DataTable dt = DatabaseSql.GetTable(query, attrs);
 
             decimal luyKe = 0;
             int stt = 1;

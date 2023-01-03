@@ -47,7 +47,7 @@ namespace Project.Model
             }
             else
             {
-                DataRow row = Database.GetFirstRow("select * from tdonhang where id = @id", attrs);
+                DataRow row = DatabaseSql.GetFirstRow("select * from tdonhang where id = @id", attrs);
                 if (row != null)
                 {
                     ID = row["ID"].ToString();
@@ -64,7 +64,7 @@ namespace Project.Model
         private List<TDONHANGCHITIETRow> ChiTietHoaDon()
         {
             List<TDONHANGCHITIETRow> lst = new List<TDONHANGCHITIETRow>();
-            DataTable dtChiTiet = Database.GetTable(@"select tdonhangchitiet.* from tdonhangchitiet
+            DataTable dtChiTiet = DatabaseSql.GetTable(@"select tdonhangchitiet.* from tdonhangchitiet
                     inner join dmathang on dmathangid = dmathang.id where tdonhangid = @id order by dmathang.name", attrs);
             foreach (DataRow rChiTiet in dtChiTiet.Rows)
             {
@@ -80,15 +80,15 @@ namespace Project.Model
             if (ID == null || ID.Length == 0)
             {
                 ID = Guid.NewGuid().ToString();
-                NAME = Database.GenCode("NAME", "TDONHANG");
+                NAME = DatabaseSql.GenCode("NAME", "TDONHANG");
 
-                Database.ExcuteQuery(@"insert into tdonhang(id, ngay, name, dkhachhangid, tongcong, note)
+                DatabaseSql.ExcuteQuery(@"insert into tdonhang(id, ngay, name, dkhachhangid, tongcong, note)
                     values(@id, @ngay, @name, @dkhachhangid, @tongcong, @note)", attrs, out error);
                 if (error.Length > 0) kq = false;
             }
             else
             {
-                Database.ExcuteQuery(@"update tdonhang set ngay = @ngay, name = @name, dkhachhangid = @dkhachhangid,
+                DatabaseSql.ExcuteQuery(@"update tdonhang set ngay = @ngay, name = @name, dkhachhangid = @dkhachhangid,
                     tongcong = @tongcong, note = @note where id = @id", attrs, out error);
                 if (error.Length > 0) kq = false;
             }
@@ -109,9 +109,9 @@ namespace Project.Model
 
         public override bool Delete(out string error)
         {
-            Database.ExcuteQuery("delete from tdonhang where id = @id", attrs, out error);
+            DatabaseSql.ExcuteQuery("delete from tdonhang where id = @id", attrs, out error);
             if (error.Length > 0) return false;
-            Database.ExcuteQuery("delete from tdonhangchitiet where tdonhangid = @id", attrs, out error);
+            DatabaseSql.ExcuteQuery("delete from tdonhangchitiet where tdonhangid = @id", attrs, out error);
             if (error.Length > 0) return false;
             return true;
         }

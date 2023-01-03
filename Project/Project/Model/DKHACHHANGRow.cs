@@ -38,7 +38,7 @@ namespace Project.Model
             }
             else
             {
-                DataRow row = Database.GetFirstRow("select * from dkhachhang where id = @id", attrs);
+                DataRow row = DatabaseSql.GetFirstRow("select * from dkhachhang where id = @id", attrs);
                 if (row != null)
                 {
                     ID = row["ID"].ToString();
@@ -62,7 +62,7 @@ namespace Project.Model
         {
             error = "";
             //kiểm tra trùng tên
-            DataTable tbl = Database.GetTable("select * from dkhachhang where (code=@code or name=@name) and id <> @id", attrs);
+            DataTable tbl = DatabaseSql.GetTable("select * from dkhachhang where (code=@code or name=@name) and id <> @id", attrs);
             if (tbl.Rows.Count > 0)
             {
                 error = "Khách hàng đã tồn tại trong hệ thống";
@@ -72,12 +72,12 @@ namespace Project.Model
             if (ID == null || ID.Length == 0)
             {
                 ID = Guid.NewGuid().ToString();
-                CODE = Database.GenCode("CODE", "DKHACHHANG");
-                Database.ExcuteQuery("insert into dkhachhang(id, code, name, dienthoai, diachi) values(@id, @code, @name, @dienthoai, @diachi)", attrs);
+                CODE = DatabaseSql.GenCode("CODE", "DKHACHHANG");
+                DatabaseSql.ExcuteQuery("insert into dkhachhang(id, code, name, dienthoai, diachi) values(@id, @code, @name, @dienthoai, @diachi)", attrs);
             }
             else
             {
-                Database.ExcuteQuery("update dkhachhang set name = @name, dienthoai = @dienthoai, diachi = @diachi where id = @id", attrs);
+                DatabaseSql.ExcuteQuery("update dkhachhang set name = @name, dienthoai = @dienthoai, diachi = @diachi where id = @id", attrs);
             }
             return true;
         }
@@ -86,7 +86,7 @@ namespace Project.Model
         {
             error = "";
             if (ID.Length == 0) return false;
-            Database.ExcuteQuery("delete from dkhachhang where id = @id", attrs);
+            DatabaseSql.ExcuteQuery("delete from dkhachhang where id = @id", attrs);
             return true;
         }
         private Dictionary<string, object> attrs

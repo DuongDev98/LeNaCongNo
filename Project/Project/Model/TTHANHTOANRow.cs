@@ -43,7 +43,7 @@ namespace Project.Model
             }
             else
             {
-                DataRow row = Database.GetFirstRow("select * from tthanhtoan where id = @id", attrs);
+                DataRow row = DatabaseSql.GetFirstRow("select * from tthanhtoan where id = @id", attrs);
                 if (row != null)
                 {
                     ID = row["ID"].ToString();
@@ -62,15 +62,15 @@ namespace Project.Model
             if (ID == null || ID.Length == 0)
             {
                 ID = Guid.NewGuid().ToString();
-                NAME = Database.GenCode("NAME", "TTHANHTOAN");
+                NAME = DatabaseSql.GenCode("NAME", "TTHANHTOAN");
 
-                Database.ExcuteQuery(@"insert into tthanhtoan(id, ngay, name, dkhachhangid, tongcong, note)
+                DatabaseSql.ExcuteQuery(@"insert into tthanhtoan(id, ngay, name, dkhachhangid, tongcong, note)
                     values(@id, @ngay, @name, @dkhachhangid, @tongcong, @note)", attrs, out error);
                 if (error.Length > 0) kq = false;
             }
             else
             {
-                Database.ExcuteQuery(@"update tthanhtoan set ngay = @ngay, name = @name, dkhachhangid = @dkhachhangid,
+                DatabaseSql.ExcuteQuery(@"update tthanhtoan set ngay = @ngay, name = @name, dkhachhangid = @dkhachhangid,
                     tongcong = @tongcong, note = @note where id = @id", attrs, out error);
                 if (error.Length > 0) kq = false;
             }
@@ -79,7 +79,7 @@ namespace Project.Model
 
         public override bool Delete(out string error)
         {
-            Database.ExcuteQuery("delete from tthanhtoan where id = @id", attrs, out error);
+            DatabaseSql.ExcuteQuery("delete from tthanhtoan where id = @id", attrs, out error);
             if (error.Length > 0) return false;
             return true;
         }

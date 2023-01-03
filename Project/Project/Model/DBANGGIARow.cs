@@ -40,7 +40,7 @@ namespace Project.Model
             }
             else
             {
-                DataRow row = Database.GetFirstRow("select * from dbanggia where id = @id", attrs);
+                DataRow row = DatabaseSql.GetFirstRow("select * from dbanggia where id = @id", attrs);
                 if (row != null)
                 {
                     ID = row["ID"].ToString();
@@ -55,7 +55,7 @@ namespace Project.Model
         private List<DBANGGIACHITIETRow> LayChiTietBangGia()
         {
             List<DBANGGIACHITIETRow> lst = new List<DBANGGIACHITIETRow>();
-            DataTable dtChiTiet = Database.GetTable("select * from dbanggiachitiet where dbanggiaid = @id", attrs);
+            DataTable dtChiTiet = DatabaseSql.GetTable("select * from dbanggiachitiet where dbanggiaid = @id", attrs);
             foreach (DataRow rChiTiet in dtChiTiet.Rows)
             {
                 DBANGGIACHITIETRow ctRow = new DBANGGIACHITIETRow(rChiTiet);
@@ -71,15 +71,15 @@ namespace Project.Model
             if (ID == null || ID.Length == 0)
             {
                 ID = Guid.NewGuid().ToString();
-                NAME = Database.GenCode("NAME", "DBANGGIA");
+                NAME = DatabaseSql.GenCode("NAME", "DBANGGIA");
 
-                Database.ExcuteQuery(@"insert into dbanggia(id, name, tungay, denngay)
+                DatabaseSql.ExcuteQuery(@"insert into dbanggia(id, name, tungay, denngay)
                 values(@id, @name, @tungay, @denngay)", attrs, out error);
                 if (error.Length > 0) kq = false;
             }
             else
             {
-                Database.ExcuteQuery(@"update dbanggia set tungay = @tungay, denngay = @denngay where id = @id", attrs, out error);
+                DatabaseSql.ExcuteQuery(@"update dbanggia set tungay = @tungay, denngay = @denngay where id = @id", attrs, out error);
                 if (error.Length > 0) kq = false;
             }
             return kq;
@@ -99,9 +99,9 @@ namespace Project.Model
 
         public override bool Delete(out string error)
         {
-            Database.ExcuteQuery("delete from dbanggia where id = @id", attrs, out error);
+            DatabaseSql.ExcuteQuery("delete from dbanggia where id = @id", attrs, out error);
             if (error.Length > 0) return false;
-            Database.ExcuteQuery("delete from dbanggiachitiet where dbanggiaid = @id", attrs, out error);
+            DatabaseSql.ExcuteQuery("delete from dbanggiachitiet where dbanggiaid = @id", attrs, out error);
             if (error.Length > 0) return false;
             return true;
         }

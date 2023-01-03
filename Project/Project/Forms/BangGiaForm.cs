@@ -53,7 +53,7 @@ namespace Project.Forms
             {
                 Dictionary<string, object> dic = new Dictionary<string, object>();
                 dic.Add("@dbanggiaid", bangGiaRow.ID);
-                Database.ExcuteQuery(@"delete from dbanggiachitiet where dbanggiaid = @dbanggiaid", dic, out error);
+                DatabaseSql.ExcuteQuery(@"delete from dbanggiachitiet where dbanggiaid = @dbanggiaid", dic, out error);
 
                 foreach (DataRow row in dt.Rows)
                 {

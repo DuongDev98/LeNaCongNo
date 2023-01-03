@@ -25,7 +25,7 @@ namespace Project.Model
             }
             else
             {
-                DataRow row = Database.GetFirstRow("select * from dmathang where id = @id", attrs);
+                DataRow row = DatabaseSql.GetFirstRow("select * from dmathang where id = @id", attrs);
                 if (row != null)
                 {
                     ID = row["ID"].ToString();
@@ -46,7 +46,7 @@ namespace Project.Model
         {
             error = "";
             //kiểm tra trùng tên
-            DataTable tbl = Database.GetTable("select * from dmathang where (code=@code or name=@name) and id <> @id", attrs);
+            DataTable tbl = DatabaseSql.GetTable("select * from dmathang where (code=@code or name=@name) and id <> @id", attrs);
             if (tbl.Rows.Count > 0)
             {
                 error = "Mặt hàng đã tồn tại trong hệ thống";
@@ -56,12 +56,12 @@ namespace Project.Model
             if (ID == null || ID.Length == 0)
             {
                 ID = Guid.NewGuid().ToString();
-                CODE = Database.GenCode("CODE", "DMATHANG");
-                Database.ExcuteQuery("insert into dmathang(id, code, name) values(@id, @code, @name)", attrs);
+                CODE = DatabaseSql.GenCode("CODE", "DMATHANG");
+                DatabaseSql.ExcuteQuery("insert into dmathang(id, code, name) values(@id, @code, @name)", attrs);
             }
             else
             {
-                Database.ExcuteQuery("update dmathang set name = @name where id = @id", attrs);
+                DatabaseSql.ExcuteQuery("update dmathang set name = @name where id = @id", attrs);
             }
             return true;
         }
@@ -70,7 +70,7 @@ namespace Project.Model
         {
             error = "";
             if (ID.Length == 0) return false;
-            Database.ExcuteQuery("delete from dmathang where id = @id", attrs);
+            DatabaseSql.ExcuteQuery("delete from dmathang where id = @id", attrs);
             return true;
         }
         private Dictionary<string, object> attrs

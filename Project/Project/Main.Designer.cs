@@ -41,6 +41,7 @@
             this.mnuTongHopCongNo = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuChiTietCongNo = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl = new System.Windows.Forms.TabControl();
+            this.mnuQuery = new System.Windows.Forms.ToolStripMenuItem();
             this.menuMain.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -49,7 +50,8 @@
             this.menuMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.bÁNHÀNGToolStripMenuItem,
             this.cÔNGNỢToolStripMenuItem,
-            this.bÁOCÁOToolStripMenuItem});
+            this.bÁOCÁOToolStripMenuItem,
+            this.mnuQuery});
             this.menuMain.Location = new System.Drawing.Point(0, 0);
             this.menuMain.Name = "menuMain";
             this.menuMain.Size = new System.Drawing.Size(1350, 24);
@@ -147,6 +149,12 @@
             this.tabControl.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.tabControl_DrawItem);
             this.tabControl.MouseDown += new System.Windows.Forms.MouseEventHandler(this.tabControl_MouseDown);
             // 
+            // mnuQuery
+            // 
+            this.mnuQuery.Name = "mnuQuery";
+            this.mnuQuery.Size = new System.Drawing.Size(119, 20);
+            this.mnuQuery.Text = "TRUY VẤN DỮ LIỆU";
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -182,5 +190,6 @@
         private System.Windows.Forms.ToolStripMenuItem mnuTongHopCongNo;
         private System.Windows.Forms.ToolStripMenuItem mnuChiTietCongNo;
         private System.Windows.Forms.TabControl tabControl;
+        private System.Windows.Forms.ToolStripMenuItem mnuQuery;
     }
 }

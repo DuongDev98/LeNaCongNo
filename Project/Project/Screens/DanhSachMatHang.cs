@@ -144,8 +144,8 @@ namespace Project
             {
                 query += " where code like N'%" + filter + "%' or name like N'%" + filter + "%'";
             }
-            query += " order by name asc";
-            DataTable dt = Database.GetTable(query, null);
+            query += " order by code asc";
+            DataTable dt = DatabaseSql.GetTable(query, null);
             return dt;
         }
     }

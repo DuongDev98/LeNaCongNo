@@ -145,7 +145,7 @@ namespace Project
                 query += " where code like N'%" + filter + "%' or name like N'%" + filter + "%' or dienthoai like N'%" + filter + "%' or diachi like N'%" + filter + "%'";
             }
             query += " order by name asc";
-            DataTable dt = Database.GetTable(query, null);
+            DataTable dt = DatabaseSql.GetTable(query, null);
             return dt;
         }
 

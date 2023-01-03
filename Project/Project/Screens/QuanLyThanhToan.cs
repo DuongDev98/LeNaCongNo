@@ -182,7 +182,7 @@ namespace Project.Screens
             query += " order by name asc";
             Dictionary<string, object> attrs = new Dictionary<string, object>();
             attrs.Add("@dkhachhangid", DKHACHHANGID);
-            DataTable dt = Database.GetTable(query, attrs);
+            DataTable dt = DatabaseSql.GetTable(query, attrs);
             return dt;
         }
     }

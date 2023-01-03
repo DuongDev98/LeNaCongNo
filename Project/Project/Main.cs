@@ -26,6 +26,12 @@ namespace Project
             mnuQuanLyThanhToan.Click += MnuQuanLyThanhToan_Click;
             mnuTongHopCongNo.Click += MnuTongHopCongNo_Click;
             mnuChiTietCongNo.Click += MnuChiTietCongNo_Click;
+            mnuQuery.Click += MnuQuery_Click;
+        }
+
+        private void MnuQuery_Click(object sender, EventArgs e)
+        {
+            OpenTapMain(new Query());
         }
 
         private void MnuQuanLyThanhToan_Click(object sender, EventArgs e)

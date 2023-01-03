@@ -22,3 +22,5 @@ H:\PHUONG\DoiNo\Project\Project\obj\Debug\Project.Screens.TongHopCongNo.resource
 H:\PHUONG\DoiNo\Project\Project\obj\Debug\Project.Screens.ChiTietCongNo.resources
 H:\PHUONG\DoiNo\Project\Project\obj\Debug\Project.Screens.QuanLyThanhToan.resources
 H:\PHUONG\DoiNo\Project\Project\obj\Debug\Project.Forms.ThanhToanForm.resources
+H:\PHUONG\DoiNo\Project\Project\obj\Debug\Project.Screens.Query.resources
+H:\PHUONG\DoiNo\Project\Project\obj\Debug\Project.Screens.SetConnection.resources
