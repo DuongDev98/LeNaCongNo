@@ -13,7 +13,8 @@ namespace Project.Common
             try
             {
                 string connectionStandard = @"Server={0};Database={1};User Id=sa;Password=1433;";
-                return new SqlConnection(string.Format(connectionStandard, "DESKTOP-KGNTJPE\\DATA", "DOINO"));
+                //return new SqlConnection(string.Format(connectionStandard, "DESKTOP-KGNTJPE\\DATA", "DOINO"));
+                return new SqlConnection(string.Format(connectionStandard, "ngocduong\\sqlserver", "DOINO"));
             }
             catch (Exception ex)
             {
